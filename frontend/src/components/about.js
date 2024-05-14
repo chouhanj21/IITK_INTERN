@@ -1,8 +1,10 @@
 import React from 'react';
+import Sidebar from './sidebar';
 
 function About() {
   return (
    <>
+   <Sidebar/>
     <h2 style={{textAlign: "center"}}><span style={{borderBottom: "2pt solid blue"}} class="px-4">About</span></h2>
     <div class="container px-5">
         <p style={{textAlign: "center",fontSize: "18px"}} className="px-5">

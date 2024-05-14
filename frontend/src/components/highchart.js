@@ -10,12 +10,15 @@ const Units={
     A_W_Speed:"A.W.Speed (m/s)",
     Max_W_Speed: "Max.W.Speed (m/s)",
     W_Dir:"W.Dir. (deg)",
+    Wind_Direction: "Wind Direction (deg)",
     SolarRadation:"Solar Radation (watts/mtr)",
     Baro_Press:"Baro. Press (mbar)",
+    Atm_Pressure:"Atm Pressure (mbar)",
     SHF1:"SHF1 (watts/mtr)",
     SHF2:"SHF2 (watts/mtr)",
     LavelInPan:"Label In Pan (mm)",
     Rain: "Rain (mm)",
+    Rainfall: "Rainfall (mm)",
     BatteryVoltage:"Battery Voltage (Volts)",
 }
 
@@ -35,9 +38,11 @@ const makeChart =(data,column)=>{
     const Y_vals = data.map(item => item[column]);
     // const graph_data = labels.map((label, index) => [label, temps[index]]);
     // console.log(temps.length);
+    // console.log(column);
+    const Type = (column==="Rain" || column === "Rainfall")? 'column' : 'line';
     Highcharts.chart(`${column}-container`, {
         chart: {
-            type:'line',
+            type:Type,
             zoomType: 'xy'
         },
         title: {

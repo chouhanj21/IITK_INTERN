@@ -10,14 +10,3 @@ const client = new Client({
 })
 client.connect();
 export default client;
-
-// client.connect();
-// client.query(`Select * from table1`, (err,res)=>{
-//     if(!err){
-//         console.log(res.rows);
-//     }
-//     else{
-//         console.log(err.message);
-//     }
-//     client.end;
-// })

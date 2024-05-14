@@ -1,23 +1,23 @@
-import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Home from './components/home';
-import IITKanpur from './components/iitkanpur';
+import AWS3 from './components/iitkanpur/aws3';
 import Bithoor from './components/bithoor';
 import About from './components/about';
-import Sidebar from './components/sidebar';
+import SoilMoisture from './components/iitkanpur/soilMoisture';
 
 function App() {
   return (
-    <Router>
-      <div>
-        <Sidebar/>
+    <div>
+      <Router>
         <Routes>
-          <Route path="/iitkanpur" element={<IITKanpur />} />
+          <Route path="/iitkanpur/aws3" element={<AWS3 />}/>
+          <Route path="/iitkanpur/soil-moisture" element={<SoilMoisture />}/>
           <Route path="/bithoor" element={<Bithoor />} />
           <Route path="/about" element={<About />} />
           <Route path="/" element={<Home />} />
         </Routes>
-      </div>
-    </Router>
+      </Router>
+    </div>
   );
 }
 
