@@ -57,7 +57,8 @@ export const getDataFromAWS4 = (req, res) => {
 export const getAllDataFromSoilMoisture = (req, res) => {
     // console.log("I am here");
     const schema = "Soil Moisture";
-    const id=6;
+    const id=req.body.params.id;
+    // console.log("my id: ",id);
     client.query(`Select * from "${schema}".spectrum${id}`, (error,result)=>{
         if (error) {
             console.error("Error fetching data:", error);

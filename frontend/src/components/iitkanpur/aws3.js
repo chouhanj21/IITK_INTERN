@@ -65,11 +65,11 @@ function AWS3() {
         {isLoading
             ?  
             <div style={{textAlign:"center"}}>
-                <img src="media/loading.gif" width={100} alt="loading..." srcSet="" />
+                <img src="../media/loading.gif" width={100} alt="loading..." srcSet="" />
                 <p style={{color:"blue"}}> <i>Loading...</i></p>
             </div> 
             :
-            null
+            null 
         }
         {/* <pre>{JSON.stringify(Data, null, 2)}</pre> */}
         <TempChart data={Data}/>

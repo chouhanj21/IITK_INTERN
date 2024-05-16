@@ -3,9 +3,8 @@ import {getAllDataFromAWS3,getDataFromAWS3,getDataFromAWS4,getAllDataFromSoilMoi
 const router = Router();
 
 router.get("/aws3/getall",getAllDataFromAWS3);
-
 router.post("/aws3/fromto",getDataFromAWS3);
 router.post("/aws4/fromto",getDataFromAWS4);
-router.get("/soil-moisture/spectrum",getAllDataFromSoilMoisture);
+router.post("/soil-moisture/spectrum",getAllDataFromSoilMoisture);
 
 export default router;
