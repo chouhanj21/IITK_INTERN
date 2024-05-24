@@ -29,12 +29,12 @@ function Bithoor() {
         }
         setIsLoading(true);
         try{
-            const response = await axios.post("http://localhost:5000/api/v1/db/aws4/fromto",{
-                params:{
-                    startDate:startDate,
-                    endDate:endDate,
+            const response = await axios.post("http://localhost:5000/data-collection/weather/aws4",
+                {
+                    start_date:startDate,
+                    end_date:endDate,
                 }
-            });
+            );
             //console.log(response.data.length);
             setData(response.data);
         } 

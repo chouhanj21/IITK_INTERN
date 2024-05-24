@@ -11,7 +11,6 @@ const SoilChart = ({data}) => {
 const makeChart =(data)=>{
     const labels = data.map(item =>{
         const date = new Date(item.Date);
-        date.setDate(date.getDate() - 1); // Subtract one day from the date
         return date.toLocaleDateString() + ' ' + item.Time;
     });
     const Y1 = data.map(item => item["Soil_Moisture_A"]);

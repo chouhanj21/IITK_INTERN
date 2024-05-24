@@ -10,11 +10,7 @@ function ShowChart() {
     const [Data,setData] = useState(null);
     const fetchData = async (id)=>{
         try{
-            const response = await axios.post("http://localhost:5000/api/v1/db/soil-moisture/spectrum",{
-                params:{
-                    id:id,
-                }
-            });
+            const response = await axios.get(`http://localhost:5000/data-collection/soil-moisture/spectrum/${id}`);
             setData(response.data);
         } 
         catch(error){

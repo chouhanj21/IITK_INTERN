@@ -32,7 +32,6 @@ const Chart = ({data,column}) => {
 const makeChart =(data,column)=>{
     const labels = data.map(item =>{
         const date = new Date(item.Date);
-        date.setDate(date.getDate() - 1); // Subtract one day from the date
         return date.toLocaleDateString() + ' ' + item.Time;
     });
     const Y_vals = data.map(item => item[column]);
