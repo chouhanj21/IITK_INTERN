@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react';
 import Sidebar from '../../sidebar';
-import SoilChart from './soilMoistureChart';
+import SoilMoistureChart from './soilMoistureChart';
 import axios from 'axios';
 import "./soilMoisture.css";
 import { useParams } from 'react-router-dom'; 
@@ -25,7 +25,7 @@ function ShowSoilMoistureChart() {
     <>
             <Sidebar/>
             {/* <pre>{JSON.stringify(Data, null, 2)}</pre> */}
-            <SoilChart data={Data}/>            
+            <SoilMoistureChart data={Data}/>            
     </>
   );
 }
