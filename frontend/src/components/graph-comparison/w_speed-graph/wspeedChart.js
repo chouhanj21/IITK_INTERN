@@ -3,7 +3,7 @@ import Highcharts from "highcharts";
 
 const WSpeedChart = ({data}) => {
   useEffect(() => {
-    if (data && data.length > 0) makeChart(data);
+    if (data) makeChart(data);
   }, [data]);
   return <div id="wspeed-container"></div>;
 };
@@ -11,7 +11,8 @@ const WSpeedChart = ({data}) => {
 const makeChart =(data)=>{
     const labels = data.map(item =>{
         const date = new Date(item.Date);
-        return date.toLocaleDateString() + ' ' + item.Time;
+        if(item.Time) return date.toLocaleDateString() + ' ' + item.Time;
+        else return date.toLocaleDateString();
     });
     const wspeed = data.map(item => item["W_Speed"]);
     const awspeed = data.map(item => item["A_W_Speed"]);

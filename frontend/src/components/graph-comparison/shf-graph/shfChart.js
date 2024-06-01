@@ -3,7 +3,7 @@ import Highcharts from "highcharts";
 
 const SHFChart = ({data}) => {
   useEffect(() => {
-    if (data && data.length > 0) makeChart(data);
+    if (data) makeChart(data);
   }, [data]);
   return <div id="shf-container"></div>;
 };
@@ -11,7 +11,8 @@ const SHFChart = ({data}) => {
 const makeChart =(data)=>{
     const labels = data.map(item =>{
         const date = new Date(item.Date);
-        return date.toLocaleDateString() + ' ' + item.Time;
+        if(item.Time) return date.toLocaleDateString() + ' ' + item.Time;
+        else return date.toLocaleDateString();
     });
     const shf1 = data.map(item => item["SHF1"]);
     const shf2 = data.map(item => item["SHF2"]);

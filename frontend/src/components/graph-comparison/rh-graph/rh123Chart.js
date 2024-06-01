@@ -3,7 +3,7 @@ import Highcharts from "highcharts";
 
 const RH123Chart = ({data}) => {
   useEffect(() => {
-    if (data && data.length > 0) makeChart(data);
+    if (data) makeChart(data);
   }, [data]);
   return <div id="rh-container"></div>;
 };
@@ -11,7 +11,8 @@ const RH123Chart = ({data}) => {
 const makeChart =(data)=>{
     const labels = data.map(item =>{
         const date = new Date(item.Date);
-        return date.toLocaleDateString() + ' ' + item.Time;
+        if(item.Time) return date.toLocaleDateString() + ' ' + item.Time;
+        else return date.toLocaleDateString();
     });
     const RH1 = data.map(item => item["RH1"]);
     const RH2 = data.map(item => item["RH2"]);

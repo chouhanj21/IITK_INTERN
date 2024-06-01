@@ -1,5 +1,5 @@
 import psycopg2
-from methods import printall
+# from methods import printall
 #postgres is default schema which is passing as an arguement
 connection = psycopg2.connect(database='postgres',host='localhost',user='postgres',password='password',port='5433')
 connection.autocommit = True
@@ -87,6 +87,23 @@ connection.autocommit = True
 
 # cur.close()
 # connection.close()
+
+
+
+## SELECT QUERY FOR DAILY AVERAGE
+# SELECT "aws3"."Date",
+# AVG("aws3"."Temp1") AS AvgTemp
+# FROM "Weather"."aws3"
+# WHERE "aws3"."Date" BETWEEN '2023-01-01' AND '2023-01-30'
+# GROUP BY "aws3"."Date"
+
+
+# SELECT DATE_TRUNC('week', "aws3"."Date")::date AS WeekStart,
+#        AVG("aws3"."Temp1") AS AvgTemp
+# FROM "Weather"."aws3"
+# WHERE "aws3"."Date" BETWEEN '2023-01-01' AND '2023-01-30'
+# GROUP BY DATE_TRUNC('week', "aws3"."Date")::date
+# ORDER BY DATE_TRUNC('week', "aws3"."Date")::date
 
 
 

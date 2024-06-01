@@ -1,0 +1,14 @@
+.action{
+    width: 100%;
+    background: none;
+    border: 1px solid wheat;
+    color: white;
+}
+.action:hover{
+    background: white;
+    color: black;
+}
+.active.action {
+    background-color: wheat;
+    color: black;
+  }

@@ -36,6 +36,7 @@ function Bithoor() {
                 }
             );
             //console.log(response.data.length);
+            console.log(response.data)
             setData(response.data);
         } 
         catch(error){
@@ -57,8 +58,7 @@ function Bithoor() {
                 <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
             </label>
             <button type="submit" className='my-btn' disabled={isLoading} >Fetch Data</button>
-        </form>
-   
+        </form>   
         {isLoading
             ?  
             <div style={{textAlign:"center"}}>

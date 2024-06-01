@@ -6,11 +6,11 @@ import "./soilMoisture.css";
 import { useParams } from 'react-router-dom'; 
 
 function ShowChart() {    
-    const { id } = useParams();
+    const { year, id } = useParams();
     const [Data,setData] = useState(null);
-    const fetchData = async (id)=>{
+    const fetchData = async (id,year)=>{
         try{
-            const response = await axios.get(`http://localhost:5000/data-collection/soil-moisture/spectrum/${id}`);
+            const response = await axios.get(`http://localhost:5000/data-collection/soil-moisture-${year}/spectrum/${id}`);
             setData(response.data);
         } 
         catch(error){
@@ -18,16 +18,14 @@ function ShowChart() {
         }
     }
     useEffect(()=>{
-        fetchData(id);
-    },[id])
+        fetchData(id,year);
+    },[id,year])
 
   return (
     <>
             <Sidebar/>
             {/* <pre>{JSON.stringify(Data, null, 2)}</pre> */}
-            <SoilChart data={Data}/>
-
-            
+            <SoilChart data={Data}/>            
     </>
   );
 }

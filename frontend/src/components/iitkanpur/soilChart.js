@@ -3,7 +3,7 @@ import Highcharts from "highcharts";
 
 const SoilChart = ({data}) => {
   useEffect(() => {
-    if (data && data.length > 0) makeChart(data);
+    if (data) makeChart(data);
   }, [data]);
   return <div id="container"></div>;
 };
@@ -11,7 +11,8 @@ const SoilChart = ({data}) => {
 const makeChart =(data)=>{
     const labels = data.map(item =>{
         const date = new Date(item.Date);
-        return date.toLocaleDateString() + ' ' + item.Time;
+        if(item.Time) return date.toLocaleDateString() + ' ' + item.Time;
+        else return date.toLocaleDateString();
     });
     const Y1 = data.map(item => item["Soil_Moisture_A"]);
     const Y2 = data.map(item => item["Soil_Moisture_B"]);

@@ -9,7 +9,6 @@ import SHFChart from '../graph-comparison/shf-graph/shfChart';
 import { ToastContainer, toast } from 'react-toastify';
 import '../../styles/button.css';
 import 'react-toastify/dist/ReactToastify.css';
-import Sidebar from '../sidebar';
 
 
 
@@ -18,6 +17,7 @@ function AWS3() {
     const [endDate, setEndDate] = useState('');
     const [Data,setData] = useState(null);
     const [isLoading,setIsLoading]=useState(false);
+    const [option,setOption]=useState('custom');
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Check if both start date and end date are selected
@@ -36,9 +36,11 @@ function AWS3() {
                     {
                         start_date:startDate,
                         end_date:endDate,
+                        type:option
                     }
                 );
             //console.log(response.data.length);
+            console.log(option);
             setData(response.data);
         } 
         catch(error){
@@ -48,20 +50,26 @@ function AWS3() {
       };
   return (
     <div>
-        <Sidebar/>
         <ToastContainer />
             <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center',justifyContent: "center"}}>
-            <label style={{ margin: '20px' }}>
+            <label style={{ margin: '8px' }}>
                 Start Date: &nbsp; &nbsp;
                 <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
             </label>
-            <label style={{ margin:"20px" }}>
+            <label style={{ margin:"8px" }}>
                 End Date:&nbsp; &nbsp;
                 <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
             </label>
+            <label style={{ margin: '8px' }}>
+                Option: &nbsp; &nbsp;
+                <select value={option} onChange={(e) => setOption(e.target.value)}>
+                    <option value="custom">Custom</option>
+                    <option value="daily">Daily Average</option>
+                    <option value="weekly">Weekly Average</option>
+                </select>
+            </label>
             <button type="submit" className='my-btn' disabled={isLoading} >Fetch Data</button>
-        </form>
-   
+        </form>   
         {isLoading
             ?  
             <div style={{textAlign:"center"}}>
@@ -90,7 +98,7 @@ function AWS3() {
         <Chart data={Data} column={"SHF2"}/> */}
         <Chart data={Data} column={"LavelInPan"}/>
         <Chart data={Data} column={"Rain"}/>
-        <Chart data={Data} column={"BatteryVoltage"}/>
+        {/* <Chart data={Data} column={"BatteryVoltage"}/> */}
     </div>
   );
 }

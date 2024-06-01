@@ -24,7 +24,7 @@ const Units={
 
 const Chart = ({data,column}) => {
   useEffect(() => {
-    if (data && data.length > 0) makeChart(data,column);
+    if (data) makeChart(data,column);
   }, [data,column]);
   return <div id={`${column}-container`}></div>;
 };
@@ -32,7 +32,8 @@ const Chart = ({data,column}) => {
 const makeChart =(data,column)=>{
     const labels = data.map(item =>{
         const date = new Date(item.Date);
-        return date.toLocaleDateString() + ' ' + item.Time;
+        if(item.Time) return date.toLocaleDateString() + ' ' + item.Time;
+        else return date.toLocaleDateString();
     });
     const Y_vals = data.map(item => item[column]);
     // const graph_data = labels.map((label, index) => [label, temps[index]]);
