@@ -1,13 +1,13 @@
 import React from 'react';
 import {useState} from 'react';
 import axios from 'axios';
-import Chart from '../highchart';
-import TempChart from '../graph-comparison/temp-graph/tempChart';
-import RHChart from '../graph-comparison/rh-graph/rhChart';
-import WSpeedChart from '../graph-comparison/w_speed-graph/wspeedChart';
-import SHFChart from '../graph-comparison/shf-graph/shfChart';
+import Chart from '../../highchart';
+import TempChart from '../../graph-comparison/temp-graph/tempChart';
+import RHChart from '../../graph-comparison/rh-graph/rhChart';
+import WSpeedChart from '../../graph-comparison/w_speed-graph/wspeedChart';
+import SHFChart from '../../graph-comparison/shf-graph/shfChart';
 import { ToastContainer, toast } from 'react-toastify';
-import '../../styles/button.css';
+import '../../../styles/button.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 

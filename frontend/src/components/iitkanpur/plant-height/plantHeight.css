@@ -1,0 +1,21 @@
+.my-button {
+    background-color: blue;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
+  .my-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .disable-link{
+    background-color: gray;
+    pointer-events: none;
+  }

@@ -1,35 +1,32 @@
 import React, { useEffect } from "react";
 import Highcharts from "highcharts";
 
-const SoilChart = ({data}) => {
+const LeafAreaIndexChart = ({ data, id }) => {
   useEffect(() => {
-    if (data) makeChart(data);
-  }, [data]);
+    if (data) makeChart(data, id);
+  }, [data, id]);
+  
   return <div id="container"></div>;
 };
 
-const makeChart =(data)=>{
-    const labels = data.map(item =>{
-        const date = new Date(item.Date);
-        if(item.Time) return date.toLocaleDateString() + ' ' + item.Time;
-        else return date.toLocaleDateString();
-    });
-    const Y1 = data.map(item => item["Soil_Moisture_A"]);
-    const Y2 = data.map(item => item["Soil_Moisture_B"]);
-    const Y3 = data.map(item => item["Soil_Moisture_C"]);
-    const Y4 = data.map(item => item["Soil_Moisture_D"]);
+const makeChart = (data, id) => {
+  const labels = data.map(item => {
+    const date = new Date(item.Date);
+    return date.toLocaleDateString();
+  });
+  const Y = data.map(item => item[`Plot${id}`]);
     Highcharts.chart("container", {
         chart: {
             type:'line',
             zoomType: 'xy',
         },
         title: {
-          text: `Time Vs Soil Moisture`,
+          text: `Time Vs Leaf Area Index`,
           align: 'center'
         },
         yAxis: {
           title: {
-            text: "Moisture",
+            text: "Leaf Area Index",
           }
         },
         xAxis: {
@@ -56,17 +53,8 @@ const makeChart =(data)=>{
           }
         },
         series: [{
-            name: "Soil Moisture A",
-            data:Y1,
-        },{
-            name:"Soil Moisture B",
-            data:Y2,
-        },{
-            name:"Soil Moisture C",
-            data:Y3,
-        },{
-            name:"Soil Moisture D",
-            data:Y4,
+            name: "Leaf Are Index",
+            data:Y,
         }
         ],
         responsive: {
@@ -84,6 +72,6 @@ const makeChart =(data)=>{
           }]
         }
       });      
-}
+};
 
-export default SoilChart;
+export default LeafAreaIndexChart;
