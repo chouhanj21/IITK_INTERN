@@ -39,6 +39,7 @@ def daily_data_of_weather_aws3(start_date,end_date):
                         FROM "Weather"."aws3"
                         WHERE "Date" BETWEEN %s AND %s
                         GROUP BY "Date"
+                        ORDER BY "Date"
                     ''', (start_date, end_date))
         rows=cur.fetchall()
         cur.close()
@@ -104,6 +105,8 @@ def weekly_data_of_weather_aws3(start_date, end_date):
         return results
     except:
         return []
+
+
     
 def data_of_soil_moisture(id,year):
     try:
