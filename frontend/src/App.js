@@ -2,12 +2,13 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Home from './components/home';
 import IITKanpur from './components/iitkanpur/iitKanpur';
 import AWS3 from './components/iitkanpur/aws/aws3';
-import Bithoor from './components/bithoor';
+import Bithoor from './components/bithoor/bithoor';
 import About from './components/about';
 import ShowSoilMoistureChart from './components/iitkanpur/soil-moisture/showSoilMoistureChart';
 import ShowPlantHeightChart from './components/iitkanpur/plant-height/showPlantHeightChart';
 import ShowLeafAreaIndexChart from './components/iitkanpur/leaf-area-index/showLeafAreaIndexChart';
 import ShowRootDepthChart from './components/iitkanpur/root-depth/showRootDepthChart';
+import Comparison from './components/comparison/comparison';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/iitkanpur/leaf-area-index/:year/showchart/:id" element={<ShowLeafAreaIndexChart />}/>
           <Route path="/iitkanpur/root-depth/:year/showchart/:id" element={<ShowRootDepthChart />}/>
           <Route path="/bithoor" element={<Bithoor />} />
+          <Route path="/comparison" element={<Comparison />}/>
           <Route path="/about" element={<About />} />
           <Route path="/" element={<Home />} />
         </Routes>

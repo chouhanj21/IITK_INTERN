@@ -2,19 +2,19 @@ import React from 'react';
 import {useState} from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
-import '../../../styles/button.css';
+import '../../styles/button.css';
 import 'react-toastify/dist/ReactToastify.css';
-import WindSpeedWindRose from './windSpeedWindRose';
+import Sidebar from '../sidebar';
+import CompChart from './compChart';
 
 
 
-function ShowWindRose() {
+function Comparison() {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [WindSpeedData,setWindSpeedData] = useState(null);
-    const [AverageWindSpeedData,setAverageWindSpeedData] = useState(null);
-    const [MaxWindSpeedData,setMaxWindSpeedData] = useState(null);
+    const [Data,setData] = useState(null);
     const [isLoading,setIsLoading]=useState(false);
+    const [variable,setVariable]=useState('Temp1');
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Check if both start date and end date are selected
@@ -29,17 +29,16 @@ function ShowWindRose() {
         }
         setIsLoading(true);
         try{
-            const response = await axios.post("http://localhost:5000/data-collection/weather/aws3/wind-rose",
+            const response = await axios.post("http://localhost:5000/data-collection/weather/aws/comparison",
                     {
                         start_date:startDate,
-                        end_date:endDate
+                        end_date:endDate,
+                        variable:variable
                     }
                 );
-            // const response = await axios.get("http://localhost:5000/data-collection/weather/aws3/wind-rose")
-            console.log(response.data.wind_speed_data);
-            setWindSpeedData(response.data.wind_speed_data);
-            setAverageWindSpeedData(response.data.average_wind_speed_data);
-            setMaxWindSpeedData(response.data.max_wind_speed_data);
+            //console.log(response.data.length);
+            // console.log(response.data)
+            setData(response.data);
         } 
         catch(error){
             console.log(error);
@@ -48,6 +47,7 @@ function ShowWindRose() {
       };
   return (
     <div>
+        <Sidebar/>
         <ToastContainer />
             <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center',justifyContent: "center"}}>
             <label style={{ margin: '8px' }}>
@@ -57,6 +57,20 @@ function ShowWindRose() {
             <label style={{ margin:"8px" }}>
                 End Date:&nbsp; &nbsp;
                 <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+            </label>
+            <label style={{ margin: '8px' }}>
+                Variable: &nbsp; &nbsp;
+                <select value={variable} onChange={(e) => setVariable(e.target.value)}>
+                    <option value="Temp1">Temp1</option>
+                    <option value="Temp2">Temp2</option>
+                    <option value="SHF1">SHF1</option>
+                    <option value="SHF2">SHF2</option>
+                    <option value="W_Speed">Wind Speed</option>
+                    <option value="Max_W_Speed">Max Wind Speed</option>
+                    <option value="W_Dir">Wind Direction</option>
+                    <option value="SolarRadiation">Solar Radation</option>
+                    <option value="Rainfall">Rainfall</option>
+                </select>
             </label>
             <button type="submit" className='my-btn' disabled={isLoading} >Fetch Data</button>
         </form>   
@@ -69,11 +83,9 @@ function ShowWindRose() {
             :
             null 
         }
-        <WindSpeedWindRose Data={WindSpeedData} Title={'Wind Speed'}/>
-        <WindSpeedWindRose Data={AverageWindSpeedData} Title={'Average Wind Speed'}/>
-        <WindSpeedWindRose Data={MaxWindSpeedData} Title={'Max Wind Speed'}/>
+        <CompChart data={Data} variable={variable}/>
     </div>
   );
 }
 
-export default ShowWindRose;
+export default Comparison;

@@ -40,7 +40,8 @@ function AWS3() {
                     }
                 );
             //console.log(response.data.length);
-            console.log(option);
+            // console.log(option);
+            console.log(response.data)
             setData(response.data);
         } 
         catch(error){

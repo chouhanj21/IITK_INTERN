@@ -28,6 +28,9 @@ function Sidebar() {
               <Link className="nav-link text-white" to="/bithoor">Bithoor</Link>
             </li>
             <li className="nav-item">
+              <Link className="nav-link text-white" to="/comparison">Comparison</Link>
+            </li>
+            <li className="nav-item">
               <Link className="nav-link text-white" to="/about">About</Link>
             </li>
           </ul>

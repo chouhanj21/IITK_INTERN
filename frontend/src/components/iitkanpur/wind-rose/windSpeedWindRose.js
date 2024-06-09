@@ -7,7 +7,7 @@ import HighchartsReact from 'highcharts-react-official';
 
 HighchartsMore(Highcharts);
 
-const WindSpeedWindRose = ({Data}) => {
+const WindSpeedWindRose = ({Data,Title}) => {
     // console.log(Data);
     const [chartOptions, setChartOptions] = useState(null);
     useEffect(() => {
@@ -20,7 +20,7 @@ const WindSpeedWindRose = ({Data}) => {
                   width: 800   // Adjust width
                 },
                 title: {
-                  text: 'Wind rose for AWS3'
+                  text: `Wind rose for ${Title} AWS3`
                 },
                 subtitle: {
                   text: 'Weather Station of IIT Kanpur'
@@ -39,7 +39,7 @@ const WindSpeedWindRose = ({Data}) => {
                   },
                 xAxis: {
                   tickmarkPlacement: 'on',
-                  categories: ['360\u00B0 / 0\u00B0', '30\u00B0', '60\u00B0', '90\u00B0', '120\u00B0', '150\u00B0', '180\u00B0', '210\u00B0', '240\u00B0', '270\u00B0', '300\u00B0', '330\u00B0'], // Change axis labels here
+                  categories: ['0\u00B0 - 30\u00B0', '30\u00B0 - 60\u00B0', '60\u00B0 - 90\u00B0', '90\u00B0 - 120\u00B0', '120\u00B0 - 150\u00B0', '150\u00B0 - 180\u00B0', '180\u00B0 - 210\u00B0', '210\u00B0 - 240\u00B0', '240\u00B0 - 270\u00B0', '270\u00B0 - 300\u00B0', '300\u00B0 - 330\u00B0', '330\u00B0 - 360\u00B0'], // Change axis labels here
                 },
                 yAxis: {
                   min: 0,
@@ -62,13 +62,17 @@ const WindSpeedWindRose = ({Data}) => {
                   series: {
                     stacking: 'normal',
                     shadow: false,
-                    groupPadding: 0,
+                    groupPadding: -0.12,
                     pointPlacement: 'on'
                   }
                 },
                 series: [
                   {
-                    name: '< 1 m/s',
+                    name: '<0.5 m/s',
+                    data:Data.set0
+                  },
+                  {
+                    name: '0.5-1 m/s',
                     data:Data.set1
                   },
                   {
@@ -95,7 +99,7 @@ const WindSpeedWindRose = ({Data}) => {
               };
               setChartOptions(newChartOptions);   
           }
-    }, [Data]);
+    }, [Data,Title]);
 
   if (!chartOptions) {
     return null;

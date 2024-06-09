@@ -6,12 +6,19 @@ from datetime import datetime,time
 from db_connection import connection
 
 from methods import custom_data_of_weather_aws3
+from methods import custom_data_of_weather_aws4
 from methods import daily_data_of_weather_aws3
+from methods import daily_data_of_weather_aws4
 from methods import weekly_data_of_weather_aws3
+from methods import weekly_data_of_weather_aws4
 from methods import data_of_plant_height
 from methods import data_of_soil_moisture
 from methods import data_of_leaf_area_index
 from methods import data_of_root_depth
+from methods import wind_speed_from_weather_aws3
+from methods import average_wind_speed_from_weather_aws3
+from methods import max_wind_speed_from_weather_aws3
+from methods import get_comparison_data_from_aws
 app = Flask(__name__)
 # CORS(app, resources={r"/data-collection/weather/aws3": {"origins": "http://localhost:3000"}})
 CORS(app)
@@ -61,86 +68,91 @@ def weather_aws4():
     data = request.json
     start_date_str = data.get('start_date')
     end_date_str = data.get('end_date')
+    option=data.get('type')
     start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
     end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
-    cur=connection.cursor()
-    cur.execute('SELECT * FROM "Weather"."aws4" WHERE "Date" BETWEEN %s AND %s', (start_date, end_date))
-    rows=cur.fetchall()
-    cur.close()
     results=[]
-    for row in rows:
-        result = {}
-        for i, column in enumerate(cur.description):
-            result[column.name]=str(row[i]) if isinstance(row[i],time) else row[i]
-        results.append(result)
+    if(option=='custom'):
+        results=custom_data_of_weather_aws4(start_date,end_date)
+    if(option=='daily'):
+        results=daily_data_of_weather_aws4(start_date,end_date)
+    if(option=='weekly'):
+        results=weekly_data_of_weather_aws4(start_date,end_date)
     return jsonify(results)
 
-@app.route('/data-collection/weather/aws3/wind-rose')
+@app.route('/data-collection/weather/aws3/wind-rose',methods=['POST'])
 def weather_aws3_wind_rose():
-    cur=connection.cursor()
-    cur.execute('''
-                WITH Speed_Group_Count AS (
-    SELECT
-        CASE 
-            WHEN "W_Dir" <= 30 THEN 'Group_1'
-            WHEN "W_Dir" > 30 AND "W_Dir" <= 60 THEN 'Group_2'
-            WHEN "W_Dir" > 60 AND "W_Dir" <= 90 THEN 'Group_3'
-            WHEN "W_Dir" > 90 AND "W_Dir" <= 120 THEN 'Group_4'
-            WHEN "W_Dir" > 120 AND "W_Dir" <= 150 THEN 'Group_5'
-            WHEN "W_Dir" > 150 AND "W_Dir" <= 180 THEN 'Group_6'
-			WHEN "W_Dir" > 180 AND "W_Dir" <= 210 THEN 'Group_7'
-            WHEN "W_Dir" > 210 AND "W_Dir" <= 240 THEN 'Group_8'
-            WHEN "W_Dir" > 240 AND "W_Dir" <= 270 THEN 'Group_9'
-            WHEN "W_Dir" > 270 AND "W_Dir" <= 300 THEN 'Group_10'
-            WHEN "W_Dir" > 300 AND "W_Dir" <= 330 THEN 'Group_11'
-            WHEN "W_Dir" > 330 THEN 'Group_12'
-        END AS Group_id,
-        CASE
-            WHEN "W_Speed" <= 1 THEN 'Speed_1'
-			WHEN "W_Speed" > 1 AND "W_Speed" <= 2 THEN 'Speed_2'
-			WHEN "W_Speed" > 2 AND "W_Speed" <= 3 THEN 'Speed_3'
-			WHEN "W_Speed" > 3 AND "W_Speed" <= 4 THEN 'Speed_4'
-            WHEN "W_Speed" > 4 AND "W_Speed" <= 5 THEN 'Speed_5'
-            WHEN "W_Speed" > 5 THEN 'Speed_6'
-        END AS Speed_id,
-        COUNT(*) AS Count_Per_Group_Speed
-    FROM 
-        "Weather"."aws3"
-    GROUP BY 
-        Group_id, Speed_id
-),
-Overall_Count AS (
-    SELECT 
-        COUNT(*) AS Total_Count
-    FROM 
-        "Weather"."aws3"
-)
+    data = request.json
+    start_date_str = data.get('start_date')
+    end_date_str = data.get('end_date')
+    start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+    end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
+    wind_speed_data= wind_speed_from_weather_aws3(start_date,end_date)
+    average_wind_speed_data = average_wind_speed_from_weather_aws3(start_date,end_date)
+    max_wind_speed_data=max_wind_speed_from_weather_aws3(start_date,end_date)
+    return jsonify({
+        'wind_speed_data':wind_speed_data,
+        'average_wind_speed_data':average_wind_speed_data,
+        'max_wind_speed_data':max_wind_speed_data
+        })
 
-SELECT 
-    Group_id,
-    Speed_id,
-    Count_Per_Group_Speed,
-    (Count_Per_Group_Speed * 100.0) / (SELECT Total_Count FROM Overall_Count) AS Percentage
-FROM 
-    Speed_Group_Count;
-                ''')
-    rows=cur.fetchall()
-    cur.close()
-    pairs_dict = {}
-
-    for group in range(1, 13):
-        for speed in range(1, 6):
-            pairs_dict[("Group_" + str(group)+"Speed_" + str(speed))] = 0
-
-    for row in rows:
-        group_id = row[0]
-        speed_id = row[1]
-        percentage = "%.4f" % row[3]  # Assuming percentage is the fourth column in the query result
-        pairs_dict[(group_id+speed_id)] = float(percentage)
-    newData = {
-        f"set{i}": [] for i in range(1, 7)
+@app.route('/data-collection/weather/aws/comparison',methods=['POST'])
+def weather_aws_comparison():
+    data=request.json
+    start_date_str = data.get('start_date')
+    end_date_str = data.get('end_date')
+    variable=data.get('variable')
+    start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+    end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
+    print(start_date,end_date,variable)
+    results=[]
+    var_dict={
+        'Temp1':{
+            'aws3_var':'Temp1',
+            'aws4_var':'Air_Temp1',
+            'fun':'AVG'
+        },
+        'Temp2':{
+            'aws3_var':'Temp2',
+            'aws4_var':'Air_Temp2',
+            'fun':'AVG'
+        },
+        'SHF1':{
+            'aws3_var':'SHF1',
+            'aws4_var':'SHF1',
+            'fun':'AVG'
+        },
+        'SHF2':{
+            'aws3_var':'SHF2',
+            'aws4_var':'SHF2',
+            'fun':'AVG'
+        },
+        'W_Speed':{
+            'aws3_var':'W_Speed',
+            'aws4_var':'Wind_Speed',
+            'fun':'AVG'
+        },
+        'Max_W_Speed':{
+            'aws3_var':'Max_W_Speed',
+            'aws4_var':'Max_Wind_Speed',
+            'fun':'AVG'
+        },
+        'W_Dir':{
+            'aws3_var':'W_Dir',
+            'aws4_var':'Wind_Direction',
+            'fun':'AVG'
+        },
+        'SolarRadiation':{
+            'aws3_var':'SolarRadiation',
+            'aws4_var':'Solar_Radiation',
+            'fun':'AVG'
+        },
+        'Rainfall':{
+            'aws3_var':'Rain',
+            'aws4_var':'Rainfall',
+            'fun':'SUM'
+        }
     }
-    for i in range(1, 7):
-        for j in range(1, 13):
-            newData[f"set{i}"].append(pairs_dict[f"Group_{j}Speed_{i}"])    
-    return jsonify(newData)
+    results=get_comparison_data_from_aws(start_date,end_date,var_dict[variable]['aws3_var'],var_dict[variable]['aws4_var'],var_dict[variable]['fun'])
+    print(results)
+    return jsonify(results)

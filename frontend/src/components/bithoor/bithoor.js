@@ -1,18 +1,19 @@
 import React from 'react';
 import {useState} from 'react';
 import axios from 'axios';
-import Chart from './highchart';
-import AirTempChart from './graph-comparison/temp-graph/airTempChart';
-import RH123Chart from './graph-comparison/rh-graph/rh123Chart';
-import WindSpeedChart from './graph-comparison/w_speed-graph/windSpeedChart';
-import SHFChart from './graph-comparison/shf-graph/shfChart';
+import Chart from '../highchart';
+import AirTempChart from '../graph-comparison/temp-graph/airTempChart';
+import RH123Chart from '../graph-comparison/rh-graph/rh123Chart';
+import WindSpeedChart from '../graph-comparison/w_speed-graph/windSpeedChart';
+import SHFChart from '../graph-comparison/shf-graph/shfChart';
 import { ToastContainer, toast } from 'react-toastify';
-import '../styles/button.css';
+import '../../styles/button.css';
 import 'react-toastify/dist/ReactToastify.css';
-import Sidebar from './sidebar';
+import Sidebar from '../sidebar';
 function Bithoor() {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [option,setOption]=useState('custom');
     const [Data,setData] = useState(null);
     const [isLoading,setIsLoading]=useState(false);
     const handleSubmit = async (e) => {
@@ -33,10 +34,11 @@ function Bithoor() {
                 {
                     start_date:startDate,
                     end_date:endDate,
+                    type:option
                 }
             );
             //console.log(response.data.length);
-            console.log(response.data)
+            // console.log(response.data)
             setData(response.data);
         } 
         catch(error){
@@ -57,6 +59,14 @@ function Bithoor() {
                 End Date:&nbsp; &nbsp;
                 <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
             </label>
+            <label style={{ margin: '8px' }}>
+                Option: &nbsp; &nbsp;
+                <select value={option} onChange={(e) => setOption(e.target.value)}>
+                    <option value="custom">Custom</option>
+                    <option value="daily">Daily Average</option>
+                    <option value="weekly">Weekly Average</option>
+                </select>
+            </label>
             <button type="submit" className='my-btn' disabled={isLoading} >Fetch Data</button>
         </form>   
         {isLoading
@@ -76,7 +86,7 @@ function Bithoor() {
         <Chart data={Data} column={"Atm_Pressure"}/>
         <SHFChart data={Data}/>
         <Chart data={Data} column={"Rainfall"}/>
-        <Chart data={Data} column={"BatteryVoltage"}/>
+        {/* <Chart data={Data} column={"BatteryVoltage"}/> */}
     </div>
   );
 }
