@@ -59,7 +59,6 @@ def leaf_area_index_spectrum(id,year):
 @app.route('/data-collection/root-depth-<year>/spectrum/<id>')
 def root_depth_spectrum(id,year):
     results=data_of_root_depth(id,year)
-    print(results)
     return jsonify(results)
 
 

@@ -53,7 +53,7 @@ const makeChart = (data, id) => {
           }
         },
         series: [{
-            name: "Leaf Are Index",
+            name: "Leaf Area Index",
             data:Y,
         }
         ],

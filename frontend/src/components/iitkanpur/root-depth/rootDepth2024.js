@@ -1,48 +1,62 @@
 import React from 'react';
-import "./rootDepth.css";
-import { Link } from 'react-router-dom';
-
-function RootDepth2024() {     
+import { useState } from 'react';
+import axios from 'axios';
+import RootDepthChart from './rootDepthChart';
+function RootDepth2024() {
+  const [Id,setId] = useState(null)
+  const [Data,setData] = useState(null);
+  const fetchData = async (id,year)=>{
+      try{
+          const response = await axios.get(`http://localhost:5000/data-collection/root-depth-${year}/spectrum/${id}`);
+          setData(response.data);
+          setId(id);
+          // console.log(response.data);
+      } 
+      catch(error){
+          console.log(error);
+      }
+  }
   return (
     <>
             <div className="text-center my-2">
-              <Link className='my-button mx-2 disable-link' id="spectrum-1" to="/iitkanpur/root-depth/2024/showchart/1">Spectrum <br /> 1</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-2" to="/iitkanpur/root-depth/2024/showchart/2">Spectrum <br /> 2</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-3" to="/iitkanpur/root-depth/2024/showchart/3">Spectrum <br /> 3</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-4" to="/iitkanpur/root-depth/2024/showchart/4">Spectrum <br /> 4</Link>
+              <button className='my-button mx-2 disable-link' id="spectrum-1" >Block-1</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-2" >Block-2</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-3" >Block-3</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-4" >Block-4</button>
             </div>
             <div className="text-center my-2">
-              <Link className='my-button mx-2 disable-link' id="spectrum-5" to="/iitkanpur/root-depth/2024/showchart/5">Spectrum <br /> 5</Link>
-              <Link className='my-button mx-2' id="spectrum-6" to="/iitkanpur/root-depth/2024/showchart/6">Spectrum <br /> 6</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-7" to="/iitkanpur/root-depth/2024/showchart/7">Spectrum <br /> 7</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-8" to="/iitkanpur/root-depth/2024/showchart/8">Spectrum <br /> 8</Link>
+              <button className='my-button mx-2 disable-link' id="spectrum-5" >Block-5</button>
+              <button className='my-button mx-2' id="spectrum-6" onClick={()=>fetchData(6,2024)} >Block-6</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-7">Block-7</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-8">Block-8</button>
             </div>
             <div className="text-center my-2">
-              <Link className='my-button mx-2 disable-link' id="spectrum-9" to="/iitkanpur/root-depth/2024/showchart/9">Spectrum <br /> 9</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-10" to="/iitkanpur/root-depth/2024/showchart/10">Spectrum <br /> 10</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-11" to="/iitkanpur/root-depth/2024/showchart/11">Spectrum <br /> 11</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-12" to="/iitkanpur/root-depth/2024/showchart/12">Spectrum <br /> 12</Link>
+              <button className='my-button mx-2 disable-link' id="spectrum-9">Block-9</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-10">Block-10</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-11">Block-11</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-12">Block-12</button>
             </div>
             <div className="text-center my-2">
-              <Link className='my-button mx-2' id="spectrum-13" to="/iitkanpur/root-depth/2024/showchart/13">Spectrum <br /> 13</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-14" to="/iitkanpur/root-depth/2024/showchart/14">Spectrum <br /> 14</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-15" to="/iitkanpur/root-depth/2024/showchart/15">Spectrum <br /> 15</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-16" to="/iitkanpur/root-depth/2024/showchart/16">Spectrum <br /> 16</Link>
+              <button className='my-button mx-2' id="spectrum-13" onClick={()=>fetchData(13,2024)}>Block-13</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-14">Block-14</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-15">Block-15</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-16">Block-16</button>
             </div>
             <div className="text-center my-2">
-              <Link className='my-button mx-2' id="spectrum-17" to="/iitkanpur/root-depth/2024/showchart/17">Spectrum <br /> 17</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-18" to="/iitkanpur/root-depth/2024/showchart/18">Spectrum <br /> 18</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-19" to="/iitkanpur/root-depth/2024/showchart/19">Spectrum <br /> 19</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-20" to="/iitkanpur/root-depth/2024/showchart/20">Spectrum <br /> 20</Link>
+              <button className='my-button mx-2' id="spectrum-17" onClick={()=>fetchData(17,2024)}>Block-17</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-18">Block-18</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-19">Block-19</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-20">Block-20</button>
             </div>
             <div className="text-center my-2">
-              <Link className='my-button mx-2' id="spectrum-21" to="/iitkanpur/root-depth/2024/showchart/21">Spectrum <br /> 21</Link>
-              <Link className='my-button mx-2' id="spectrum-22" to="/iitkanpur/root-depth/2024/showchart/22">Spectrum <br /> 22</Link>
+              <button className='my-button mx-2' id="spectrum-21" onClick={()=>fetchData(21,2024)}>Block-21</button>
+              <button className='my-button mx-2' id="spectrum-22" onClick={()=>fetchData(22,2024)}>Block-22</button>
             </div>
             <div className="text-center my-2">
-              <Link className='my-button mx-2' id="spectrum-23" to="/iitkanpur/root-depth/2024/showchart/23">Spectrum <br /> 23</Link>
-              <Link className='my-button mx-2 disable-link' id="spectrum-24" to="/iitkanpur/root-depth/2024/showchart/24">Spectrum <br /> 24</Link>
+              <button className='my-button mx-2' id="spectrum-23" onClick={()=>fetchData(23,2024)}>Block-23</button>
+              <button className='my-button mx-2 disable-link' id="spectrum-24">Block-24</button>
             </div>
+            <RootDepthChart data={Data} id={Id}/>      
     </>
   );
 }

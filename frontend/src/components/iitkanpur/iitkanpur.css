@@ -12,3 +12,25 @@
     background-color: wheat;
     color: black;
   }
+  .my-button {
+    background-color: blue;
+    width: 100px;
+    border: none;
+    color: white;
+    padding: 4px 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
+  .my-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .disable-link{
+    background-color: gray;
+    pointer-events: none;
+  }
