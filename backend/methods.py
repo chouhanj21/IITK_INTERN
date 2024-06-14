@@ -241,7 +241,7 @@ def data_of_soil_moisture(id,year):
 def data_of_plant_height(id,year):
     try:
         cur = connection.cursor()
-        cur.execute(f'SELECT "Date", "AVG{id}", "SE{id}" FROM "Plant Height"."plant_height_{year}"')
+        cur.execute(f'''SELECT "Date", "AVG{id}", "SE{id}" FROM "Plant Height"."plant_height_{year}" WHERE "AVG{id}" != 'NAN' AND "SE{id}" !='NAN' ''')
         rows = cur.fetchall()
         results = []
         for row in rows:

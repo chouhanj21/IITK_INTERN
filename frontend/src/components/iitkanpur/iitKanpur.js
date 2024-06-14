@@ -8,8 +8,11 @@ import SoilMoisture2023 from './soil-moisture/soilMoisture2023';
 import SoilMoisture2024 from './soil-moisture/soilMoisture2024';
 import PlantHeight2024 from './plant-height/plantHeight2024';
 import LeafAreaIndex2024 from './leaf-area-index/leafAreaIndex2024';
+import RootDepth2023 from './root-depth/rootDepth2023';
 import RootDepth2024 from './root-depth/rootDepth2024';
 import ShowWindRose from './wind-rose/showWindRose';
+import PlantHeight2023 from './plant-height/plantHeight2023';
+import PlantHeight2022 from './plant-height/plantHeight2022';
 
 function IITKanpur() {
   const [activeButton, setActiveButton] = useState('AWS3');
@@ -28,8 +31,11 @@ function IITKanpur() {
             <div><button className={activeButton === 'Soil Moisture 2022' ? 'active action' : 'action'} onClick={() => handleButtonClick('Soil Moisture 2022')}>Soil Moisture 2022</button></div>
             <div><button className={activeButton === 'Soil Moisture 2023' ? 'active action' : 'action'} onClick={() => handleButtonClick('Soil Moisture 2023')}>Soil Moisture 2023</button></div>
             <div><button className={activeButton === 'Soil Moisture 2024' ? 'active action' : 'action'} onClick={() => handleButtonClick('Soil Moisture 2024')}>Soil Moisture 2024</button></div>
+            <div><button className={activeButton === 'Plant Height 2022' ? 'active action' : 'action'} onClick={() => handleButtonClick('Plant Height 2022')}>Plant Height 2022</button></div>
+            <div><button className={activeButton === 'Plant Height 2023' ? 'active action' : 'action'} onClick={() => handleButtonClick('Plant Height 2023')}>Plant Height 2023</button></div>
             <div><button className={activeButton === 'Plant Height 2024' ? 'active action' : 'action'} onClick={() => handleButtonClick('Plant Height 2024')}>Plant Height 2024</button></div>
             <div><button className={activeButton === 'Leaf Area Index 2024' ? 'active action' : 'action'} onClick={() => handleButtonClick('Leaf Area Index 2024')}>Leaf Area Index 2024</button></div>
+            <div><button className={activeButton === 'Root Depth 2023' ? 'active action' : 'action'} onClick={() => handleButtonClick('Root Depth 2023')}>Root Depth 2023</button></div>
             <div><button className={activeButton === 'Root Depth 2024' ? 'active action' : 'action'} onClick={() => handleButtonClick('Root Depth 2024')}>Root Depth 2024</button></div>
             <div><button className={activeButton === 'Wind Speed (Wind Rose)' ? 'active action' : 'action'} onClick={() => handleButtonClick('Wind Speed (Wind Rose)')}>Wind Speed (Wind Rose)</button></div>
           </div>
@@ -39,8 +45,11 @@ function IITKanpur() {
             {(activeButton==='Soil Moisture 2022') && (<SoilMoisture2022/>)}
             {(activeButton==='Soil Moisture 2023') && (<SoilMoisture2023/>)}
             {(activeButton==='Soil Moisture 2024') && (<SoilMoisture2024/>)}
+            {(activeButton==='Plant Height 2022') && (<PlantHeight2022/>)}
+            {(activeButton==='Plant Height 2023') && (<PlantHeight2023/>)}
             {(activeButton==='Plant Height 2024') && (<PlantHeight2024/>)}
             {(activeButton==='Leaf Area Index 2024') && (<LeafAreaIndex2024/>)}
+            {(activeButton==='Root Depth 2023') && (<RootDepth2023/>)}
             {(activeButton==='Root Depth 2024') && (<RootDepth2024/>)}
             {(activeButton==='Wind Speed (Wind Rose)') && (<ShowWindRose/>)}
           </div>

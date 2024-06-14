@@ -77,31 +77,31 @@ function SoilMoisture2021() {
             </div>
             <div className="text-center my-2">
               <button className='my-button mx-2' id="spectrum-5" onClick={()=>fetchData(5,2021)}>Block-5</button>
-              <button className='my-button mx-2' id="spectrum-6" onClick={()=>fetchData(6,2021)} >Block-6</button>
-              <button className='my-button mx-2' id="spectrum-7" onClick={()=>fetchData(7,2021)}>Block-7</button>
+              <button className='org-button mx-2' id="spectrum-6" onClick={()=>fetchData(6,2021)} >Block-6</button>
+              <button className='org-button mx-2' id="spectrum-7" onClick={()=>fetchData(7,2021)}>Block-7</button>
               <button className='my-button mx-2' id="spectrum-8" onClick={()=>fetchData(8,2021)}>Block-8</button>
             </div>
             <div className="text-center my-2">
               <button className='my-button mx-2' id="spectrum-9" onClick={()=>fetchData(9,2021)}>Block-9</button>
-              <button className='my-button mx-2' id="spectrum-10" onClick={()=>fetchData(10,2021)}>Block-10</button>
-              <button className='my-button mx-2' id="spectrum-11" onClick={()=>fetchData(11,2021)}>Block-11</button>
+              <button className='org-button mx-2' id="spectrum-10" onClick={()=>fetchData(10,2021)}>Block-10</button>
+              <button className='org-button mx-2' id="spectrum-11" onClick={()=>fetchData(11,2021)}>Block-11</button>
               <button className='my-button mx-2' id="spectrum-12" onClick={()=>fetchData(12,2021)}>Block-12</button>
             </div>
             <div className="text-center my-2">
               <button className='my-button mx-2' id="spectrum-13" onClick={()=>fetchData(13,2021)}>Block-13</button>
-              <button className='my-button mx-2' id="spectrum-14" onClick={()=>fetchData(14,2021)}>Block-14</button>
-              <button className='my-button mx-2' id="spectrum-15" onClick={()=>fetchData(15,2021)}>Block-15</button>
+              <button className='org-button mx-2' id="spectrum-14" onClick={()=>fetchData(14,2021)}>Block-14</button>
+              <button className='org-button mx-2' id="spectrum-15" onClick={()=>fetchData(15,2021)}>Block-15</button>
               <button className='my-button mx-2 disable-link' id="spectrum-16">Block-16</button>
             </div>
             <div className="text-center my-2">
               <button className='my-button mx-2' id="spectrum-17" onClick={()=>fetchData(17,2021)}>Block-17</button>
-              <button className='my-button mx-2 disable-link' id="spectrum-18">Block-18</button>
-              <button className='my-button mx-2' id="spectrum-19" onClick={()=>fetchData(19,2021)}>Block-19</button>
+              <button className='org-button mx-2 org-disable-link' id="spectrum-18">Block-18</button>
+              <button className='org-button mx-2' id="spectrum-19" onClick={()=>fetchData(19,2021)}>Block-19</button>
               <button className='my-button mx-2' id="spectrum-20" onClick={()=>fetchData(20,2021)}>Block-20</button>
             </div>
             <div className="text-center my-2">
-              <button className='my-button mx-2 disable-link' id="spectrum-21">Block-21</button>
-              <button className='my-button mx-2' id="spectrum-22" onClick={()=>fetchData(22,2021)}>Block-22</button>
+              <button className='org-button mx-2 org-disable-link' id="spectrum-21">Block-21</button>
+              <button className='org-button mx-2' id="spectrum-22" onClick={()=>fetchData(22,2021)}>Block-22</button>
             </div>
             <div className="text-center my-2">
               <button className='my-button mx-2' id="spectrum-23" onClick={()=>fetchData(23,2021)}>Block-23</button>
