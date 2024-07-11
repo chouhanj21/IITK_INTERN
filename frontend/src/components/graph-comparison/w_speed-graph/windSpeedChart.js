@@ -23,7 +23,7 @@ const makeChart =(data)=>{
             zoomType: 'xy'
         },
         title: {
-          text: `Time Vs Wind Speed`,
+          text: `Wind Speed`,
           align: 'center'
         },
         yAxis: {
@@ -54,13 +54,13 @@ const makeChart =(data)=>{
           }
         },
         series: [{
-            name: "Wind_Speed",
+            name: "Wind Speed",
             data:windSpeed,
         },{
-            name:"Max_Wind_Speed",
+            name:"Max Wind Speed",
             data:maxWindSpeed,
         },{
-            name:"Min_Wind_Speed",
+            name:"Min Wind Speed",
             data:minWindSpeed,
         }
         ],

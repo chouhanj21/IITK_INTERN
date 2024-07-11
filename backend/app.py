@@ -103,7 +103,6 @@ def weather_aws_comparison():
     variable=data.get('variable')
     start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
     end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
-    print(start_date,end_date,variable)
     results=[]
     var_dict={
         'Temp1':{
@@ -153,5 +152,4 @@ def weather_aws_comparison():
         }
     }
     results=get_comparison_data_from_aws(start_date,end_date,var_dict[variable]['aws3_var'],var_dict[variable]['aws4_var'],var_dict[variable]['fun'])
-    print(results)
     return jsonify(results)

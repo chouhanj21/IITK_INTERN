@@ -1,18 +1,39 @@
 import React, { useEffect } from "react";
 import Highcharts from "highcharts";
 
+const Name={
+  Temp1:"Temp(At 1m)",
+  RH1:"RH1",
+  Temp2:"Temp(At 2m)",
+  RH2:"RH2",
+  W_Speed:"Wind Speed",
+  A_W_Speed:"Avg Wind Speed",
+  Max_W_Speed: "Max Wind Speed",
+  W_Dir:"Wind Direction",
+  Wind_Direction: "Wind Direction",
+  SolarRadiation:"Solar Radation",
+  Baro_Press:"Barometer Pressure",
+  Atm_Pressure:"Atm Pressure",
+  SHF1:"SHF1",
+  SHF2:"SHF2",
+  LavelInPan:"Label In Pan",
+  Rain: "Rain",
+  Rainfall: "Rain",
+  BatteryVoltage:"Battery Voltage",
+};
+
 const Units={
     Temp1:"Temp1 (Deg C)",
     RH1:"RH1 (%)",
     Temp2:"Temp2 (Deg C)",
     RH2:"RH2 (%)",
-    W_Speed:"W.Speed (m/s)",
-    A_W_Speed:"A.W.Speed (m/s)",
-    Max_W_Speed: "Max.W.Speed (m/s)",
-    W_Dir:"W.Dir. (deg)",
+    W_Speed:"Wind Speed (m/s)",
+    A_W_Speed:"Avg Wind Speed (m/s)",
+    Max_W_Speed: "Max Wind Speed (m/s)",
+    W_Dir:"Wind Direction (deg)",
     Wind_Direction: "Wind Direction (deg)",
-    SolarRadation:"Solar Radation (watts/mtr)",
-    Baro_Press:"Baro. Press (mbar)",
+    SolarRadiation:"Solar Radation (watts/mtr^2)",
+    Baro_Press:"Barometer Press (mbar)",
     Atm_Pressure:"Atm Pressure (mbar)",
     SHF1:"SHF1 (watts/mtr)",
     SHF2:"SHF2 (watts/mtr)",
@@ -38,7 +59,8 @@ const makeChart =(data,column)=>{
     const Y_vals = data.map(item => item[column]);
     // const graph_data = labels.map((label, index) => [label, temps[index]]);
     // console.log(temps.length);
-    // console.log(column);
+    console.log(column);
+    console.log(Units[column]);
     const Type = (column==="Rain" || column === "Rainfall")? 'column' : 'line';
     Highcharts.chart(`${column}-container`, {
         chart: {
@@ -46,7 +68,7 @@ const makeChart =(data,column)=>{
             zoomType: 'xy'
         },
         title: {
-          text: `Time Vs ${column}`,
+          text: Name[column],
           align: 'center'
         },
         yAxis: {
@@ -77,7 +99,7 @@ const makeChart =(data,column)=>{
           }
         },
         series: [{
-            name: column,
+            name: Name[column],
             data:Y_vals,
         },
         ],

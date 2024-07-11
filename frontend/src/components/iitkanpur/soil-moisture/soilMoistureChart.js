@@ -24,12 +24,12 @@ const makeChart =(data)=>{
             zoomType: 'xy',
         },
         title: {
-          text: `Time Vs Soil Moisture`,
+          text: `Soil Moisture`,
           align: 'center'
         },
         yAxis: {
           title: {
-            text: "Moisture",
+            text: "Soil Moisture (%)",
           }
         },
         xAxis: {

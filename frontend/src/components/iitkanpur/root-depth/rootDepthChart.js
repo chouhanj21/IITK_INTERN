@@ -21,12 +21,12 @@ const makeChart = (data, id) => {
             zoomType: 'xy',
         },
         title: {
-          text: `Time Vs Root Depth`,
+          text: `Root Depth For Plot${id}`,
           align: 'center'
         },
         yAxis: {
           title: {
-            text: "Root Depth",
+            text: "Root Depth (cm)",
           }
         },
         xAxis: {

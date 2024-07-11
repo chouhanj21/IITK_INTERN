@@ -23,7 +23,7 @@ const makeChart =(data)=>{
             zoomType: 'xy'
         },
         title: {
-          text: `Time Vs Air Temperature`,
+          text: `Air Temperature`,
           align: 'center'
         },
         yAxis: {

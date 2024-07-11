@@ -23,7 +23,7 @@ const makeChart =(data)=>{
             zoomType: 'xy'
         },
         title: {
-          text: `Time Vs Wind Speed`,
+          text: `Wind Speed`,
           align: 'center'
         },
         yAxis: {

@@ -23,12 +23,12 @@ const makeChart = (data, id) => {
       zoomType: 'xy',
     },
     title: {
-      text: `Time Vs Plant-Height`,
+      text: `Plant-Height For Plot ${id}`,
       align: 'center'
     },
     yAxis: {
       title: {
-        text: "Plant Height",
+        text: "Plant Height (cm)",
       }
     },
     xAxis: {
@@ -59,7 +59,7 @@ const makeChart = (data, id) => {
     },
     
     series: [{
-      name: `AVG ${id}`,
+      name: `Avg Height`,
       data: AVG,
       color: 'green',
       lineWidth: 2

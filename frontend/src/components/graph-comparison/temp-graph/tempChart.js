@@ -22,7 +22,7 @@ const makeChart =(data)=>{
             zoomType: 'xy'
         },
         title: {
-          text: `Time Vs Temperature`,
+          text: `Temperature`,
           align: 'center'
         },
         yAxis: {
@@ -53,10 +53,10 @@ const makeChart =(data)=>{
           }
         },
         series: [{
-            name: "Temp1",
+            name: "Temp(at 1m)",
             data:temp1,
         },{
-            name:"Temp2",
+            name:"Temp(at 2m)",
             data:temp2,
         }
         ],

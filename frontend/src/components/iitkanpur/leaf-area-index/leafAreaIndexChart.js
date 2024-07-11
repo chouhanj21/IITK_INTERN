@@ -21,7 +21,7 @@ const makeChart = (data, id) => {
             zoomType: 'xy',
         },
         title: {
-          text: `Time Vs Leaf Area Index`,
+          text: `Leaf Area Index For Plot${id}`,
           align: 'center'
         },
         yAxis: {
