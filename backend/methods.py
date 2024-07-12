@@ -174,7 +174,7 @@ def weekly_data_of_weather_aws3(start_date, end_date):
     
 
 def weekly_data_of_weather_aws4(start_date, end_date):
-    # try:
+    try:
         cur = connection.cursor()
         cur.execute(''' SELECT 
                             DATE_TRUNC('week',"Date")::date AS "Date",
@@ -216,9 +216,26 @@ def weekly_data_of_weather_aws4(start_date, end_date):
                 result[column.name] = value
             results.append(result)
         return results
-    # except:
-    #     return []
+    except:
+        return []
 
+
+def soil_moisture(start_date,end_date,id):
+    try:
+        cur = connection.cursor()
+        cur.execute('SELECT * FROM "Soil Moisture"."spectrum%s" WHERE "Date" BETWEEN %s AND %s',(id,start_date,end_date))
+        rows = cur.fetchall()
+        results = []
+        for row in rows:
+            result = {}
+            for i, column in enumerate(cur.description):
+                result[column.name] = str(row[i]) if isinstance(row[i], time) else row[i]
+            results.append(result)
+        
+        cur.close()
+        return results
+    except:
+        return []
 
     
 def data_of_soil_moisture(id,year):

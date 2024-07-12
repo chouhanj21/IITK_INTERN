@@ -1,32 +1,32 @@
 import React, { useEffect } from "react";
 import Highcharts from "highcharts";
 
-const RootDepthChart = ({ data, id }) => {
+const LeafAreaIndexChart = ({ data, id, year}) => {
   useEffect(() => {
-    if (data) makeChart(data, id);
-  }, [data, id]);
+    if (data && data.length>0) makeChart(data, id, year);
+  }, [data, id, year]);
   
-  return <div id="container"></div>;
+  return <div id='leaf-area-index-container'></div>;
 };
 
-const makeChart = (data, id) => {
+const makeChart = (data, id, year) => {
   const labels = data.map(item => {
     const date = new Date(item.Date);
     return date.toLocaleDateString();
   });
   const Y = data.map(item => item[`Plot${id}`]);
-    Highcharts.chart("container", {
+    Highcharts.chart("leaf-area-index-container", {
         chart: {
             type:'line',
             zoomType: 'xy',
         },
         title: {
-          text: `Root Depth For Plot${id}`,
+          text: `Leaf Area Index For Plot-${id} (${year})`,
           align: 'center'
         },
         yAxis: {
           title: {
-            text: "Root Depth (cm)",
+            text: "Leaf Area Index",
           }
         },
         xAxis: {
@@ -53,7 +53,7 @@ const makeChart = (data, id) => {
           }
         },
         series: [{
-            name: "Root Depth",
+            name: "Leaf Area Index",
             data:Y,
         }
         ],
@@ -74,4 +74,4 @@ const makeChart = (data, id) => {
       });      
 };
 
-export default RootDepthChart;
+export default LeafAreaIndexChart;

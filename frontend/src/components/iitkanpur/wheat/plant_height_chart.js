@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import Highcharts from "highcharts";
 
-const PlantHeightChart = ({ data, id }) => {
+const PlantHeightChart = ({ data, id, year}) => {
   useEffect(() => {
-    if (data) makeChart(data, id);
-  }, [data, id]);
+    if (data && data.length) makeChart(data, id, year);
+  }, [data, id, year]);
   
-  return <div id="container"></div>;
+  return <div id='plant-height-container'></div>;
 };
 
-const makeChart = (data, id) => {
+const makeChart = (data, id, year) => {
   const labels = data.map(item => {
     const date = new Date(item.Date);
     return date.toLocaleDateString();
@@ -17,13 +17,13 @@ const makeChart = (data, id) => {
   const AVG = data.map(item => item[`AVG${id}`]);
   const posSE = data.map(item => Number((item[`AVG${id}`] + item[`SE${id}`]).toFixed(2))); // Round to 2 decimal places
   const negSE = data.map(item => Number((item[`AVG${id}`] - item[`SE${id}`]).toFixed(2))); // Round to 2 decimal places
-  Highcharts.chart("container", {
+  Highcharts.chart("plant-height-container", {
     chart: {
       type: 'line',
       zoomType: 'xy',
     },
     title: {
-      text: `Plant-Height For Plot ${id}`,
+      text: `Plant-Height For Plot-${id} (${year})`,
       align: 'center'
     },
     yAxis: {

@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import Highcharts from "highcharts";
 
-const SoilMoistureChart = ({data}) => {
+const SoilMoistureChart = ({data,id}) => {
   useEffect(() => {
-    if (data) makeChart(data);
-  }, [data]);
+    if (data) makeChart(data,id);
+  }, [data,id]);
   return <div id="container"></div>;
 };
 
-const makeChart =(data)=>{
+const makeChart =(data,id)=>{
     const labels = data.map(item =>{
         const date = new Date(item.Date);
         if(item.Time) return date.toLocaleDateString() + ' ' + item.Time;
@@ -24,7 +24,7 @@ const makeChart =(data)=>{
             zoomType: 'xy',
         },
         title: {
-          text: `Soil Moisture`,
+          text: `Soil Moisture for Plot-${id}`,
           align: 'center'
         },
         yAxis: {
@@ -56,16 +56,16 @@ const makeChart =(data)=>{
           }
         },
         series: [{
-            name: "Soil Moisture A",
+            name: "Soil Moisture (at 10cm)",
             data:Y1,
         },{
-            name:"Soil Moisture B",
+            name:"Soil Moisture (at 25cm)",
             data:Y2,
         },{
-            name:"Soil Moisture C",
+            name:"Soil Moisture (at 50cm)",
             data:Y3,
         },{
-            name:"Soil Moisture D",
+            name:"Soil Moisture (at 80cm)",
             data:Y4,
         }
         ],

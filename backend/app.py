@@ -11,6 +11,7 @@ from methods import daily_data_of_weather_aws3
 from methods import daily_data_of_weather_aws4
 from methods import weekly_data_of_weather_aws3
 from methods import weekly_data_of_weather_aws4
+from methods import soil_moisture
 from methods import data_of_plant_height
 from methods import data_of_soil_moisture
 from methods import data_of_leaf_area_index
@@ -22,7 +23,6 @@ from methods import get_comparison_data_from_aws
 app = Flask(__name__)
 # CORS(app, resources={r"/data-collection/weather/aws3": {"origins": "http://localhost:3000"}})
 CORS(app)
-
 
 @app.route('/data-collection/weather/aws3',methods=['POST'])
 def weather_aws3():
@@ -41,26 +41,32 @@ def weather_aws3():
         results=weekly_data_of_weather_aws3(start_date,end_date)
     return jsonify(results)
 
-@app.route('/data-collection/soil-moisture-<year>/spectrum/<id>')
-def soil_moisture_spectrum(id,year):
-    results=data_of_soil_moisture(id,year)
-    return jsonify(results)
-    
-@app.route('/data-collection/plant-height-<year>/spectrum/<id>')
-def plant_height_spectrum(id,year):
-    results=data_of_plant_height(id,year)
-    return jsonify(results)
-
-@app.route('/data-collection/leaf-area-index-<year>/spectrum/<id>')
-def leaf_area_index_spectrum(id,year):
-    results=data_of_leaf_area_index(id,year)
+@app.route('/data-collection/soil-moisture',methods=['POST'])
+def soil_moisture_from_spectrum():
+    data = request.json
+    start_date_str = data.get('start_date')
+    end_date_str = data.get('end_date')
+    id=data.get('id')
+    start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+    end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
+    results=[]
+    results=soil_moisture(start_date,end_date,id)
     return jsonify(results)
 
-@app.route('/data-collection/root-depth-<year>/spectrum/<id>')
-def root_depth_spectrum(id,year):
-    results=data_of_root_depth(id,year)
+@app.route('/data-collection/wheat-crop',methods=['POST'])
+def wheat_crop_from_spectrum():
+    data = request.json
+    id=data.get('id')
+    year=data.get('year')
+    plant_height_results=data_of_plant_height(id,year)
+    leaf_area_index_results=data_of_leaf_area_index(id,year)
+    root_depth_results=data_of_root_depth(id,year)
+    results={
+        'plant_height':plant_height_results,
+        'leaf_area_index':leaf_area_index_results,
+        'root_depth':root_depth_results
+        }
     return jsonify(results)
-
 
 @app.route('/data-collection/weather/aws4',methods=['POST'])
 def weather_aws4():
@@ -152,4 +158,24 @@ def weather_aws_comparison():
         }
     }
     results=get_comparison_data_from_aws(start_date,end_date,var_dict[variable]['aws3_var'],var_dict[variable]['aws4_var'],var_dict[variable]['fun'])
+    return jsonify(results)
+
+@app.route('/data-collection/soil-moisture-<year>/spectrum/<id>')
+def soil_moisture_spectrum(id,year):
+    results=data_of_soil_moisture(id,year)
+    return jsonify(results)
+    
+@app.route('/data-collection/plant-height-<year>/spectrum/<id>')
+def plant_height_spectrum(id,year):
+    results=data_of_plant_height(id,year)
+    return jsonify(results)
+
+@app.route('/data-collection/leaf-area-index-<year>/spectrum/<id>')
+def leaf_area_index_spectrum(id,year):
+    results=data_of_leaf_area_index(id,year)
+    return jsonify(results)
+
+@app.route('/data-collection/root-depth-<year>/spectrum/<id>')
+def root_depth_spectrum(id,year):
+    results=data_of_root_depth(id,year)
     return jsonify(results)
