@@ -1,34 +1,34 @@
 import React, { useEffect } from "react";
 import Highcharts from "highcharts";
 
-const PlantHeightChart = ({ data, id, year}) => {
+const LeafAreaIndexChart = ({ data, year}) => {
   useEffect(() => {
-    if (data && data.length) makeChart(data, id, year);
-  }, [data, id, year]);
+    if (data && data.length) makeChart(data, year);
+  }, [data, year]);
   
-  return <div id='plant-height-container'></div>;
+  return <div id='leaf-area-index-container'></div>;
 };
 
-const makeChart = (data, id, year) => {
+const makeChart = (data, year) => {
   const labels = data.map(item => {
     const date = new Date(item.Date);
     return date.toLocaleDateString();
   });
-  const AVG = data.map(item => item[`AVG${id}`]);
-  const posSE = data.map(item => Number((item[`AVG${id}`] + item[`SE${id}`]).toFixed(2))); // Round to 2 decimal places
-  const negSE = data.map(item => Number((item[`AVG${id}`] - item[`SE${id}`]).toFixed(2))); // Round to 2 decimal places
-  Highcharts.chart("plant-height-container", {
+  const AVG = data.map(item => item['AVG']);
+  const posSE = data.map(item => Number((item['AVG'] + item['SE']).toFixed(2))); // Round to 2 decimal places
+  const negSE = data.map(item => Number((item['AVG'] - item['SE']).toFixed(2))); // Round to 2 decimal places
+  Highcharts.chart("leaf-area-index-container", {
     chart: {
       type: 'line',
       zoomType: 'xy',
     },
     title: {
-      text: `Plant Height For Plot-${id} (${year})`,
+      text: `Leaf Area Index For ${year}`,
       align: 'center'
     },
     yAxis: {
       title: {
-        text: "Plant Height (cm)",
+        text: "Leaf Area Index",
       }
     },
     xAxis: {
@@ -59,12 +59,12 @@ const makeChart = (data, id, year) => {
     },
     
     series: [{
-      name: `Avg Height`,
+      name: `Avg Value`,
       data: AVG,
       color: 'green',
       lineWidth: 2
     }, {
-      name: "Max Height",
+      name: "Max Value",
       data: posSE,
       color: 'red',
       marker: {
@@ -73,7 +73,7 @@ const makeChart = (data, id, year) => {
       },
       type: 'scatter' // Display as points
     }, {
-      name: "Min Height",
+      name: "Min Value",
       data: negSE,
       color: 'red',
       marker: {
@@ -99,4 +99,4 @@ const makeChart = (data, id, year) => {
   });
 };
 
-export default PlantHeightChart;
+export default LeafAreaIndexChart;

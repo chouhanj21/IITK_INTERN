@@ -1,0 +1,73 @@
+.action{
+    width: 100%;
+    background: none;
+    border: 1px solid wheat;
+    color: white;
+}
+.action:hover{
+    background: white;
+    color: black;
+}
+.active.action {
+    background-color: wheat;
+    color: black;
+  }
+  .act-btn {
+    background-color: gray;
+    width: 100px;
+    border: none;
+    color: white;
+    padding: 4px 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
+  .act-btn:hover {
+    transform: scale(1.1);
+  }
+  .my-button {
+    background-color: blue;
+    width: 100px;
+    border: none;
+    color: white;
+    padding: 4px 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
+  .my-button:hover {
+    transform: scale(1.1);
+  }
+  .disable-link{
+    background-color: rgb(160, 173, 241);
+    pointer-events: none;
+  }
+  .org-button {
+    background-color: green;
+    width: 100px;
+    border: none;
+    color: white;
+    padding: 4px 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
+  .org-button:hover {
+    transform: scale(1.1);
+  }
+  .org-disable-link{
+    background-color: rgb(150, 237, 150);
+    pointer-events: none;
+  }

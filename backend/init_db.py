@@ -155,7 +155,10 @@ connection.autocommit = True
 # FROM 
 #     Speed_Group_Count;
 
-
+# -- ALTER TABLE "Leaf Area Index".leaf_area_index_2023
+# -- RENAME TO leaf_area_index_iitk_wheat_2023;
+# -- ALTER TABLE "Leaf Area Index".leaf_area_index_iitk_wheat_2023
+# -- RENAME CONSTRAINT leaf_area_index_2023_pkey TO leaf_area_index_iitk_wheat_2023_pkey;
 
 
 

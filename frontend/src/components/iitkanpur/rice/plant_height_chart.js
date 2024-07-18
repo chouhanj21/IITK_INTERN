@@ -23,7 +23,7 @@ const makeChart = (data, id, year) => {
       zoomType: 'xy',
     },
     title: {
-      text: `Plant Height For Plot-${id} (${year})`,
+      text: `Plant-Height For Plot-${id} (${year})`,
       align: 'center'
     },
     yAxis: {

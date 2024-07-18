@@ -12,10 +12,16 @@ from methods import daily_data_of_weather_aws4
 from methods import weekly_data_of_weather_aws3
 from methods import weekly_data_of_weather_aws4
 from methods import soil_moisture
-from methods import data_of_plant_height
 from methods import data_of_soil_moisture
-from methods import data_of_leaf_area_index
-from methods import data_of_root_depth
+from methods import data_of_plant_height_iitk_wheat
+from methods import data_of_leaf_area_index_iitk_wheat
+from methods import data_of_root_depth_iitk_wheat
+from methods import data_of_plant_height_iitk_rice
+from methods import data_of_leaf_area_index_iitk_rice
+from methods import data_of_root_depth_iitk_rice
+from methods import data_of_plant_height_bithoor_wheat
+from methods import data_of_leaf_area_index_bithoor_wheat
+from methods import data_of_root_depth_bithoor_wheat
 from methods import wind_speed_from_weather_aws3
 from methods import average_wind_speed_from_weather_aws3
 from methods import max_wind_speed_from_weather_aws3
@@ -53,14 +59,43 @@ def soil_moisture_from_spectrum():
     results=soil_moisture(start_date,end_date,id)
     return jsonify(results)
 
-@app.route('/data-collection/wheat-crop',methods=['POST'])
+@app.route('/data-collection/wheat-crop/iitk',methods=['POST'])
 def wheat_crop_from_spectrum():
     data = request.json
     id=data.get('id')
     year=data.get('year')
-    plant_height_results=data_of_plant_height(id,year)
-    leaf_area_index_results=data_of_leaf_area_index(id,year)
-    root_depth_results=data_of_root_depth(id,year)
+    plant_height_results=data_of_plant_height_iitk_wheat(id,year)
+    leaf_area_index_results=data_of_leaf_area_index_iitk_wheat(id,year)
+    root_depth_results=data_of_root_depth_iitk_wheat(id,year)
+    results={
+        'plant_height':plant_height_results,
+        'leaf_area_index':leaf_area_index_results,
+        'root_depth':root_depth_results
+        }
+    return jsonify(results)
+
+@app.route('/data-collection/rice-crop/iitk',methods=['POST'])
+def rice_crop_from_spectrum():
+    data = request.json
+    id=data.get('id')
+    year=data.get('year')
+    plant_height_results=data_of_plant_height_iitk_rice(id,year)
+    leaf_area_index_results=data_of_leaf_area_index_iitk_rice(id,year)
+    root_depth_results=data_of_root_depth_iitk_rice(id,year)
+    results={
+        'plant_height':plant_height_results,
+        'leaf_area_index':leaf_area_index_results,
+        'root_depth':root_depth_results
+        }
+    return jsonify(results)
+
+@app.route('/data-collection/wheat-crop/bithoor',methods=['POST'])
+def wheat_crop_for_bithoor():
+    data = request.json
+    year=data.get('year')
+    plant_height_results=data_of_plant_height_bithoor_wheat(year)
+    leaf_area_index_results=data_of_leaf_area_index_bithoor_wheat(year)
+    root_depth_results=data_of_root_depth_bithoor_wheat(year)
     results={
         'plant_height':plant_height_results,
         'leaf_area_index':leaf_area_index_results,
@@ -167,15 +202,15 @@ def soil_moisture_spectrum(id,year):
     
 @app.route('/data-collection/plant-height-<year>/spectrum/<id>')
 def plant_height_spectrum(id,year):
-    results=data_of_plant_height(id,year)
+    results=data_of_plant_height_iitk_wheat(id,year)
     return jsonify(results)
 
 @app.route('/data-collection/leaf-area-index-<year>/spectrum/<id>')
 def leaf_area_index_spectrum(id,year):
-    results=data_of_leaf_area_index(id,year)
+    results=data_of_leaf_area_index_iitk_wheat(id,year)
     return jsonify(results)
 
 @app.route('/data-collection/root-depth-<year>/spectrum/<id>')
 def root_depth_spectrum(id,year):
-    results=data_of_root_depth(id,year)
+    results=data_of_root_depth_iitk_wheat(id,year)
     return jsonify(results)

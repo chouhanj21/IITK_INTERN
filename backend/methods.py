@@ -255,10 +255,10 @@ def data_of_soil_moisture(id,year):
     except:
         return []
 
-def data_of_plant_height(id,year):
+def data_of_plant_height_iitk_wheat(id,year):
     try:
         cur = connection.cursor()
-        cur.execute(f'''SELECT "Date", "AVG{id}", "SE{id}" FROM "Plant Height"."plant_height_{year}" WHERE "AVG{id}" != 'NAN' AND "SE{id}" !='NAN' ''')
+        cur.execute(f'''SELECT "Date", "AVG{id}", "SE{id}" FROM "Plant Height"."plant_height_iitk_wheat_{year}" WHERE "AVG{id}" != 'NAN' AND "SE{id}" !='NAN' ''')
         rows = cur.fetchall()
         results = []
         for row in rows:
@@ -271,10 +271,60 @@ def data_of_plant_height(id,year):
     except:
         return []
 
-def data_of_leaf_area_index(id,year):
+
+def data_of_leaf_area_index_iitk_wheat(id,year):
     try:
         cur = connection.cursor()
-        cur.execute(f'''SELECT "Date" , "Plot{id}" FROM "Leaf Area Index"."leaf_area_index_{year}" WHERE "Plot{id}" != 'NAN' ''')
+        cur.execute(f'''SELECT "Date" , "Plot{id}" FROM "Leaf Area Index"."leaf_area_index_iitk_wheat_{year}" WHERE "Plot{id}" != 'NAN' ''')
+        rows = cur.fetchall()
+        results = []
+        for row in rows:
+            result = {}
+            for i, column in enumerate(cur.description):
+                result[column.name] = str(row[i]) if isinstance(row[i], time) else row[i]
+            results.append(result)
+        cur.close()
+        return results
+    except:
+        return []
+
+def data_of_root_depth_iitk_wheat(id,year):
+    try:
+        cur = connection.cursor()
+        cur.execute(f'''SELECT "Date" , "Plot{id}" FROM "Root Depth"."root_depth_iitk_wheat_{year}" WHERE "Plot{id}" != 'NAN' ''')
+        rows = cur.fetchall()
+        results = []
+        for row in rows:
+            result = {}
+            for i, column in enumerate(cur.description):
+                result[column.name] = str(row[i]) if isinstance(row[i], time) else row[i]
+            results.append(result)
+        cur.close()
+        return results
+    except:
+        return []
+
+def data_of_plant_height_iitk_rice(id,year):
+    try:
+        cur = connection.cursor()
+        cur.execute(f'''SELECT "Date", "AVG{id}", "SE{id}" FROM "Plant Height"."plant_height_iitk_rice_{year}" WHERE "AVG{id}" != 'NAN' AND "SE{id}" !='NAN' ''')
+        rows = cur.fetchall()
+        results = []
+        for row in rows:
+            result = {}
+            for i, column in enumerate(cur.description):
+                result[column.name] = str(row[i]) if isinstance(row[i], time) else row[i]
+            results.append(result)
+        cur.close()
+        return results
+    except:
+        return []
+
+    
+def data_of_leaf_area_index_iitk_rice(id,year):
+    try:
+        cur = connection.cursor()
+        cur.execute(f'''SELECT "Date" , "Plot{id}" FROM "Leaf Area Index"."leaf_area_index_iitk_rice_{year}" WHERE "Plot{id}" != 'NAN' ''')
         rows = cur.fetchall()
         results = []
         for row in rows:
@@ -287,10 +337,11 @@ def data_of_leaf_area_index(id,year):
     except:
         return []
     
-def data_of_root_depth(id,year):
+
+def data_of_root_depth_iitk_rice(id,year):
     try:
         cur = connection.cursor()
-        cur.execute(f'''SELECT "Date" , "Plot{id}" FROM "Root Depth"."root_depth_{year}" WHERE "Plot{id}" != 'NAN' ''')
+        cur.execute(f'''SELECT "Date" , "Plot{id}" FROM "Root Depth"."root_depth_iitk_rice_{year}" WHERE "Plot{id}" != 'NAN' ''')
         rows = cur.fetchall()
         results = []
         for row in rows:
@@ -302,7 +353,55 @@ def data_of_root_depth(id,year):
         return results
     except:
         return []
-    
+
+def data_of_plant_height_bithoor_wheat(year):
+    try:
+        cur = connection.cursor()
+        cur.execute(f'''SELECT "Date", "AVG", "SE" FROM "Plant Height"."plant_height_bithoor_wheat_{year}" WHERE "AVG" != 'NAN' AND "SE" !='NAN' ''')
+        rows = cur.fetchall()
+        results = []
+        for row in rows:
+            result = {}
+            for i, column in enumerate(cur.description):
+                result[column.name] = str(row[i]) if isinstance(row[i], time) else row[i]
+            results.append(result)
+        cur.close()
+        return results
+    except:
+        return []
+
+def data_of_leaf_area_index_bithoor_wheat(year):
+    try:
+        cur = connection.cursor()
+        cur.execute(f'''SELECT "Date" , "AVG", "SE" FROM "Leaf Area Index"."leaf_area_index_bithoor_wheat_{year}" WHERE "AVG" != 'NAN' AND "SE" != 'NAN' ''')
+        rows = cur.fetchall()
+        results = []
+        for row in rows:
+            result = {}
+            for i, column in enumerate(cur.description):
+                result[column.name] = str(row[i]) if isinstance(row[i], time) else row[i]
+            results.append(result)
+        cur.close()
+        return results
+    except:
+        return []
+
+def data_of_root_depth_bithoor_wheat(year):
+    try:
+        cur = connection.cursor()
+        cur.execute(f'''SELECT "Date" , "AVG", "SE" FROM "Root Depth"."root_depth_bithoor_wheat_{year}" WHERE "AVG" != 'NAN' AND "SE" != 'NAN' ''')
+        rows = cur.fetchall()
+        results = []
+        for row in rows:
+            result = {}
+            for i, column in enumerate(cur.description):
+                result[column.name] = str(row[i]) if isinstance(row[i], time) else row[i]
+            results.append(result)
+        cur.close()
+        return results
+    except:
+        return []
+
 def wind_speed_from_weather_aws3(start_date,end_date):
     cur=connection.cursor()
     cur.execute('''

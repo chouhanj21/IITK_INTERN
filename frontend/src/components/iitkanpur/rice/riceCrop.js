@@ -3,7 +3,7 @@ import axios from 'axios';
 import PlantHeightChart from './plant_height_chart'
 import LeafAreaIndexChart from './leaf_area_index_chart';
 import RootDepthChart from './root_depth_chart';
-function WheatCrop() {
+function RiceCrop() {
     const [Id, setId] = useState(1); // Default active ID is 1
     const [year,setYear]=useState(2022); // Default year 2022
     const [passId,setPassId]=useState(null);
@@ -17,7 +17,7 @@ function WheatCrop() {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const response = await axios.post("http://localhost:5000/data-collection/wheat-crop/iitk",
+            const response = await axios.post("http://localhost:5000/data-collection/rice-crop/iitk",
                 {
                     id: Id,
                     year:year
@@ -100,5 +100,5 @@ function WheatCrop() {
     );
 }
 
-export default WheatCrop;
+export default RiceCrop;
 
