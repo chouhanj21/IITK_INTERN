@@ -25,6 +25,9 @@ from methods import data_of_root_depth_bithoor_wheat
 from methods import wind_speed_from_weather_aws3
 from methods import average_wind_speed_from_weather_aws3
 from methods import max_wind_speed_from_weather_aws3
+from methods import wind_speed_from_weather_aws4
+from methods import max_wind_speed_from_weather_aws4
+from methods import min_wind_speed_from_weather_aws4
 from methods import get_comparison_data_from_aws
 app = Flask(__name__)
 # CORS(app, resources={r"/data-collection/weather/aws3": {"origins": "http://localhost:3000"}})
@@ -134,6 +137,22 @@ def weather_aws3_wind_rose():
         'wind_speed_data':wind_speed_data,
         'average_wind_speed_data':average_wind_speed_data,
         'max_wind_speed_data':max_wind_speed_data
+        })
+
+@app.route('/data-collection/weather/aws4/wind-rose',methods=['POST'])
+def weather_aws4_wind_rose():
+    data = request.json
+    start_date_str = data.get('start_date')
+    end_date_str = data.get('end_date')
+    start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+    end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
+    wind_speed_data= wind_speed_from_weather_aws4(start_date,end_date)
+    max_wind_speed_data=max_wind_speed_from_weather_aws4(start_date,end_date)
+    min_wind_speed_data=min_wind_speed_from_weather_aws4(start_date,end_date)
+    return jsonify({
+        'wind_speed_data':wind_speed_data,
+        'max_wind_speed_data':max_wind_speed_data,
+        'min_wind_speed_data':min_wind_speed_data
         })
 
 @app.route('/data-collection/weather/aws/comparison',methods=['POST'])

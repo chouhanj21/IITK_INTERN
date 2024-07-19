@@ -403,228 +403,469 @@ def data_of_root_depth_bithoor_wheat(year):
         return []
 
 def wind_speed_from_weather_aws3(start_date,end_date):
-    cur=connection.cursor()
-    cur.execute('''
-                WITH BetweenDates AS (
-	                SELECT * FROM  "Weather"."aws3"
-	                WHERE "Date" BETWEEN %s AND %s
-                ),
-                Speed_Group_Count AS (
-    SELECT
-        CASE 
-            WHEN "W_Dir" <= 30 THEN 'Group_1'
-            WHEN "W_Dir" > 30 AND "W_Dir" <= 60 THEN 'Group_2'
-            WHEN "W_Dir" > 60 AND "W_Dir" <= 90 THEN 'Group_3'
-            WHEN "W_Dir" > 90 AND "W_Dir" <= 120 THEN 'Group_4'
-            WHEN "W_Dir" > 120 AND "W_Dir" <= 150 THEN 'Group_5'
-            WHEN "W_Dir" > 150 AND "W_Dir" <= 180 THEN 'Group_6'
-			WHEN "W_Dir" > 180 AND "W_Dir" <= 210 THEN 'Group_7'
-            WHEN "W_Dir" > 210 AND "W_Dir" <= 240 THEN 'Group_8'
-            WHEN "W_Dir" > 240 AND "W_Dir" <= 270 THEN 'Group_9'
-            WHEN "W_Dir" > 270 AND "W_Dir" <= 300 THEN 'Group_10'
-            WHEN "W_Dir" > 300 AND "W_Dir" <= 330 THEN 'Group_11'
-            WHEN "W_Dir" > 330 THEN 'Group_12'
-        END AS Group_id,
-        CASE
-            WHEN "W_Speed" <= 0.5 THEN 'Speed_0'
-            WHEN "W_Speed" > 0.5 AND "W_Speed" <= 1 THEN 'Speed_1'
-			WHEN "W_Speed" > 1 AND "W_Speed" <= 2 THEN 'Speed_2'
-			WHEN "W_Speed" > 2 AND "W_Speed" <= 3 THEN 'Speed_3'
-			WHEN "W_Speed" > 3 AND "W_Speed" <= 4 THEN 'Speed_4'
-            WHEN "W_Speed" > 4 AND "W_Speed" <= 5 THEN 'Speed_5'
-            WHEN "W_Speed" > 5 THEN 'Speed_6'
-        END AS Speed_id,
-        COUNT(*) AS Count_Per_Group_Speed
-    FROM 
-        BetweenDates
-    GROUP BY 
-        Group_id, Speed_id
-),
-Overall_Count AS (
-    SELECT 
-        COUNT(*) AS Total_Count
-    FROM 
-        BetweenDates
-)
+    try:
+        cur=connection.cursor()
+        cur.execute('''
+                    WITH BetweenDates AS (
+	                    SELECT * FROM  "Weather"."aws3"
+	                    WHERE "Date" BETWEEN %s AND %s
+                    ),
+                    Speed_Group_Count AS (
+        SELECT
+            CASE 
+                WHEN "W_Dir" <= 30 THEN 'Group_1'
+                WHEN "W_Dir" > 30 AND "W_Dir" <= 60 THEN 'Group_2'
+                WHEN "W_Dir" > 60 AND "W_Dir" <= 90 THEN 'Group_3'
+                WHEN "W_Dir" > 90 AND "W_Dir" <= 120 THEN 'Group_4'
+                WHEN "W_Dir" > 120 AND "W_Dir" <= 150 THEN 'Group_5'
+                WHEN "W_Dir" > 150 AND "W_Dir" <= 180 THEN 'Group_6'
+			    WHEN "W_Dir" > 180 AND "W_Dir" <= 210 THEN 'Group_7'
+                WHEN "W_Dir" > 210 AND "W_Dir" <= 240 THEN 'Group_8'
+                WHEN "W_Dir" > 240 AND "W_Dir" <= 270 THEN 'Group_9'
+                WHEN "W_Dir" > 270 AND "W_Dir" <= 300 THEN 'Group_10'
+                WHEN "W_Dir" > 300 AND "W_Dir" <= 330 THEN 'Group_11'
+                WHEN "W_Dir" > 330 THEN 'Group_12'
+            END AS Group_id,
+            CASE
+                WHEN "W_Speed" <= 0.5 THEN 'Speed_0'
+                WHEN "W_Speed" > 0.5 AND "W_Speed" <= 1 THEN 'Speed_1'
+			    WHEN "W_Speed" > 1 AND "W_Speed" <= 2 THEN 'Speed_2'
+			    WHEN "W_Speed" > 2 AND "W_Speed" <= 3 THEN 'Speed_3'
+			    WHEN "W_Speed" > 3 AND "W_Speed" <= 4 THEN 'Speed_4'
+                WHEN "W_Speed" > 4 AND "W_Speed" <= 5 THEN 'Speed_5'
+                WHEN "W_Speed" > 5 THEN 'Speed_6'
+            END AS Speed_id,
+            COUNT(*) AS Count_Per_Group_Speed
+        FROM 
+            BetweenDates
+        GROUP BY 
+            Group_id, Speed_id
+        ),
+        Overall_Count AS (
+            SELECT 
+                COUNT(*) AS Total_Count
+            FROM 
+                BetweenDates
+        )
 
-SELECT 
-    Group_id,
-    Speed_id,
-    Count_Per_Group_Speed,
-    (Count_Per_Group_Speed * 100.0) / (SELECT Total_Count FROM Overall_Count) AS Percentage
-FROM 
-    Speed_Group_Count;
-                ''',(start_date,end_date))
-    rows=cur.fetchall()
-    cur.close()
-    pairs_dict = {}
-    for group in range(1, 13):
-        for speed in range(0, 7):
-            pairs_dict[("Group_" + str(group)+"Speed_" + str(speed))] = 0
+        SELECT 
+            Group_id,
+            Speed_id,
+            Count_Per_Group_Speed,
+            (Count_Per_Group_Speed * 100.0) / (SELECT Total_Count FROM Overall_Count) AS Percentage
+        FROM 
+            Speed_Group_Count;
+                        ''',(start_date,end_date))
+        rows=cur.fetchall()
+        cur.close()
+        pairs_dict = {}
+        for group in range(1, 13):
+            for speed in range(0, 7):
+                pairs_dict[("Group_" + str(group)+"Speed_" + str(speed))] = 0
 
-    for row in rows:
-        group_id = row[0]
-        speed_id = row[1]
-        percentage = "%.4f" % row[3]  # Assuming percentage is the fourth column in the query result
-        pairs_dict[(group_id+speed_id)] = float(percentage)
-    newData = {
-        f"set{i}": [] for i in range(0, 7)
-    }
-    for i in range(0, 7):
-        for j in range(1, 13):
-            newData[f"set{i}"].append(pairs_dict[f"Group_{j}Speed_{i}"])
-    
-    return newData
+        for row in rows:
+            group_id = row[0]
+            speed_id = row[1]
+            percentage = "%.4f" % row[3]  # Assuming percentage is the fourth column in the query result
+            pairs_dict[(group_id+speed_id)] = float(percentage)
+        newData = {
+            f"set{i}": [] for i in range(0, 7)
+        }
+        for i in range(0, 7):
+            for j in range(1, 13):
+                newData[f"set{i}"].append(pairs_dict[f"Group_{j}Speed_{i}"])
+
+        return newData
+    except:
+        return []
 
  
 def average_wind_speed_from_weather_aws3(start_date,end_date):
-    cur=connection.cursor()
-    cur.execute('''
-                WITH BetweenDates AS (
-	                SELECT * FROM  "Weather"."aws3"
-	                WHERE "Date" BETWEEN %s AND %s
-                ),
-                Speed_Group_Count AS (
-    SELECT
-        CASE 
-            WHEN "W_Dir" <= 30 THEN 'Group_1'
-            WHEN "W_Dir" > 30 AND "W_Dir" <= 60 THEN 'Group_2'
-            WHEN "W_Dir" > 60 AND "W_Dir" <= 90 THEN 'Group_3'
-            WHEN "W_Dir" > 90 AND "W_Dir" <= 120 THEN 'Group_4'
-            WHEN "W_Dir" > 120 AND "W_Dir" <= 150 THEN 'Group_5'
-            WHEN "W_Dir" > 150 AND "W_Dir" <= 180 THEN 'Group_6'
-			WHEN "W_Dir" > 180 AND "W_Dir" <= 210 THEN 'Group_7'
-            WHEN "W_Dir" > 210 AND "W_Dir" <= 240 THEN 'Group_8'
-            WHEN "W_Dir" > 240 AND "W_Dir" <= 270 THEN 'Group_9'
-            WHEN "W_Dir" > 270 AND "W_Dir" <= 300 THEN 'Group_10'
-            WHEN "W_Dir" > 300 AND "W_Dir" <= 330 THEN 'Group_11'
-            WHEN "W_Dir" > 330 THEN 'Group_12'
-        END AS Group_id,
-        CASE
-            WHEN "A_W_Speed" <= 0.5 THEN 'Speed_0'
-            WHEN "A_W_Speed" > 0.5 AND "A_W_Speed" <= 1 THEN 'Speed_1'
-			WHEN "A_W_Speed" > 1 AND "A_W_Speed" <= 2 THEN 'Speed_2'
-			WHEN "A_W_Speed" > 2 AND "A_W_Speed" <= 3 THEN 'Speed_3'
-			WHEN "A_W_Speed" > 3 AND "A_W_Speed" <= 4 THEN 'Speed_4'
-            WHEN "A_W_Speed" > 4 AND "A_W_Speed" <= 5 THEN 'Speed_5'
-            WHEN "A_W_Speed" > 5 THEN 'Speed_6'
-        END AS Speed_id,
-        COUNT(*) AS Count_Per_Group_Speed
-    FROM 
-        BetweenDates
-    GROUP BY 
-        Group_id, Speed_id
-),
-Overall_Count AS (
+    try:
+        cur=connection.cursor()
+        cur.execute('''
+                    WITH BetweenDates AS (
+                        SELECT * FROM  "Weather"."aws3"
+                        WHERE "Date" BETWEEN %s AND %s
+                    ),
+                    Speed_Group_Count AS (
+        SELECT
+            CASE 
+                WHEN "W_Dir" <= 30 THEN 'Group_1'
+                WHEN "W_Dir" > 30 AND "W_Dir" <= 60 THEN 'Group_2'
+                WHEN "W_Dir" > 60 AND "W_Dir" <= 90 THEN 'Group_3'
+                WHEN "W_Dir" > 90 AND "W_Dir" <= 120 THEN 'Group_4'
+                WHEN "W_Dir" > 120 AND "W_Dir" <= 150 THEN 'Group_5'
+                WHEN "W_Dir" > 150 AND "W_Dir" <= 180 THEN 'Group_6'
+                WHEN "W_Dir" > 180 AND "W_Dir" <= 210 THEN 'Group_7'
+                WHEN "W_Dir" > 210 AND "W_Dir" <= 240 THEN 'Group_8'
+                WHEN "W_Dir" > 240 AND "W_Dir" <= 270 THEN 'Group_9'
+                WHEN "W_Dir" > 270 AND "W_Dir" <= 300 THEN 'Group_10'
+                WHEN "W_Dir" > 300 AND "W_Dir" <= 330 THEN 'Group_11'
+                WHEN "W_Dir" > 330 THEN 'Group_12'
+            END AS Group_id,
+            CASE
+                WHEN "A_W_Speed" <= 0.5 THEN 'Speed_0'
+                WHEN "A_W_Speed" > 0.5 AND "A_W_Speed" <= 1 THEN 'Speed_1'
+                WHEN "A_W_Speed" > 1 AND "A_W_Speed" <= 2 THEN 'Speed_2'
+                WHEN "A_W_Speed" > 2 AND "A_W_Speed" <= 3 THEN 'Speed_3'
+                WHEN "A_W_Speed" > 3 AND "A_W_Speed" <= 4 THEN 'Speed_4'
+                WHEN "A_W_Speed" > 4 AND "A_W_Speed" <= 5 THEN 'Speed_5'
+                WHEN "A_W_Speed" > 5 THEN 'Speed_6'
+            END AS Speed_id,
+            COUNT(*) AS Count_Per_Group_Speed
+        FROM 
+            BetweenDates
+        GROUP BY 
+            Group_id, Speed_id
+    ),
+    Overall_Count AS (
+        SELECT 
+            COUNT(*) AS Total_Count
+        FROM 
+            BetweenDates
+    )
+
     SELECT 
-        COUNT(*) AS Total_Count
+        Group_id,
+        Speed_id,
+        Count_Per_Group_Speed,
+        (Count_Per_Group_Speed * 100.0) / (SELECT Total_Count FROM Overall_Count) AS Percentage
     FROM 
-        BetweenDates
-)
+        Speed_Group_Count;
+                    ''',(start_date,end_date))
+        rows=cur.fetchall()
+        cur.close()
+        pairs_dict = {}
+        for group in range(1, 13):
+            for speed in range(0, 7):
+                pairs_dict[("Group_" + str(group)+"Speed_" + str(speed))] = 0
 
-SELECT 
-    Group_id,
-    Speed_id,
-    Count_Per_Group_Speed,
-    (Count_Per_Group_Speed * 100.0) / (SELECT Total_Count FROM Overall_Count) AS Percentage
-FROM 
-    Speed_Group_Count;
-                ''',(start_date,end_date))
-    rows=cur.fetchall()
-    cur.close()
-    pairs_dict = {}
-    for group in range(1, 13):
-        for speed in range(0, 7):
-            pairs_dict[("Group_" + str(group)+"Speed_" + str(speed))] = 0
-
-    for row in rows:
-        group_id = row[0]
-        speed_id = row[1]
-        percentage = "%.4f" % row[3]  # Assuming percentage is the fourth column in the query result
-        pairs_dict[(group_id+speed_id)] = float(percentage)
-    newData = {
-        f"set{i}": [] for i in range(0, 7)
-    }
-    for i in range(0, 7):
-        for j in range(1, 13):
-            newData[f"set{i}"].append(pairs_dict[f"Group_{j}Speed_{i}"])
-    
-    return newData
+        for row in rows:
+            group_id = row[0]
+            speed_id = row[1]
+            percentage = "%.4f" % row[3]  # Assuming percentage is the fourth column in the query result
+            pairs_dict[(group_id+speed_id)] = float(percentage)
+        newData = {
+            f"set{i}": [] for i in range(0, 7)
+        }
+        for i in range(0, 7):
+            for j in range(1, 13):
+                newData[f"set{i}"].append(pairs_dict[f"Group_{j}Speed_{i}"])
+        
+        return newData
+    except:
+        return []
 
 
 def max_wind_speed_from_weather_aws3(start_date,end_date):
-    cur=connection.cursor()
-    cur.execute('''
-                WITH BetweenDates AS (
-	                SELECT * FROM  "Weather"."aws3"
-	                WHERE "Date" BETWEEN %s AND %s
-                ),
-                Speed_Group_Count AS (
-    SELECT
-        CASE 
-            WHEN "W_Dir" <= 30 THEN 'Group_1'
-            WHEN "W_Dir" > 30 AND "W_Dir" <= 60 THEN 'Group_2'
-            WHEN "W_Dir" > 60 AND "W_Dir" <= 90 THEN 'Group_3'
-            WHEN "W_Dir" > 90 AND "W_Dir" <= 120 THEN 'Group_4'
-            WHEN "W_Dir" > 120 AND "W_Dir" <= 150 THEN 'Group_5'
-            WHEN "W_Dir" > 150 AND "W_Dir" <= 180 THEN 'Group_6'
-			WHEN "W_Dir" > 180 AND "W_Dir" <= 210 THEN 'Group_7'
-            WHEN "W_Dir" > 210 AND "W_Dir" <= 240 THEN 'Group_8'
-            WHEN "W_Dir" > 240 AND "W_Dir" <= 270 THEN 'Group_9'
-            WHEN "W_Dir" > 270 AND "W_Dir" <= 300 THEN 'Group_10'
-            WHEN "W_Dir" > 300 AND "W_Dir" <= 330 THEN 'Group_11'
-            WHEN "W_Dir" > 330 THEN 'Group_12'
-        END AS Group_id,
-        CASE
-            WHEN "Max_W_Speed" <= 0.5 THEN 'Speed_0'
-            WHEN "Max_W_Speed" > 0.5 AND "Max_W_Speed" <= 1 THEN 'Speed_1'
-			WHEN "Max_W_Speed" > 1 AND "Max_W_Speed" <= 2 THEN 'Speed_2'
-			WHEN "Max_W_Speed" > 2 AND "Max_W_Speed" <= 3 THEN 'Speed_3'
-			WHEN "Max_W_Speed" > 3 AND "Max_W_Speed" <= 4 THEN 'Speed_4'
-            WHEN "Max_W_Speed" > 4 AND "Max_W_Speed" <= 5 THEN 'Speed_5'
-            WHEN "Max_W_Speed" > 5 THEN 'Speed_6'
-        END AS Speed_id,
-        COUNT(*) AS Count_Per_Group_Speed
-    FROM 
-        BetweenDates
-    GROUP BY 
-        Group_id, Speed_id
-),
-Overall_Count AS (
+    try:
+        cur=connection.cursor()
+        cur.execute('''
+                    WITH BetweenDates AS (
+                        SELECT * FROM  "Weather"."aws3"
+                        WHERE "Date" BETWEEN %s AND %s
+                    ),
+                    Speed_Group_Count AS (
+        SELECT
+            CASE 
+                WHEN "W_Dir" <= 30 THEN 'Group_1'
+                WHEN "W_Dir" > 30 AND "W_Dir" <= 60 THEN 'Group_2'
+                WHEN "W_Dir" > 60 AND "W_Dir" <= 90 THEN 'Group_3'
+                WHEN "W_Dir" > 90 AND "W_Dir" <= 120 THEN 'Group_4'
+                WHEN "W_Dir" > 120 AND "W_Dir" <= 150 THEN 'Group_5'
+                WHEN "W_Dir" > 150 AND "W_Dir" <= 180 THEN 'Group_6'
+                WHEN "W_Dir" > 180 AND "W_Dir" <= 210 THEN 'Group_7'
+                WHEN "W_Dir" > 210 AND "W_Dir" <= 240 THEN 'Group_8'
+                WHEN "W_Dir" > 240 AND "W_Dir" <= 270 THEN 'Group_9'
+                WHEN "W_Dir" > 270 AND "W_Dir" <= 300 THEN 'Group_10'
+                WHEN "W_Dir" > 300 AND "W_Dir" <= 330 THEN 'Group_11'
+                WHEN "W_Dir" > 330 THEN 'Group_12'
+            END AS Group_id,
+            CASE
+                WHEN "Max_W_Speed" <= 0.5 THEN 'Speed_0'
+                WHEN "Max_W_Speed" > 0.5 AND "Max_W_Speed" <= 1 THEN 'Speed_1'
+                WHEN "Max_W_Speed" > 1 AND "Max_W_Speed" <= 2 THEN 'Speed_2'
+                WHEN "Max_W_Speed" > 2 AND "Max_W_Speed" <= 3 THEN 'Speed_3'
+                WHEN "Max_W_Speed" > 3 AND "Max_W_Speed" <= 4 THEN 'Speed_4'
+                WHEN "Max_W_Speed" > 4 AND "Max_W_Speed" <= 5 THEN 'Speed_5'
+                WHEN "Max_W_Speed" > 5 THEN 'Speed_6'
+            END AS Speed_id,
+            COUNT(*) AS Count_Per_Group_Speed
+        FROM 
+            BetweenDates
+        GROUP BY 
+            Group_id, Speed_id
+    ),
+    Overall_Count AS (
+        SELECT 
+            COUNT(*) AS Total_Count
+        FROM 
+            BetweenDates
+    )
+
     SELECT 
-        COUNT(*) AS Total_Count
+        Group_id,
+        Speed_id,
+        Count_Per_Group_Speed,
+        (Count_Per_Group_Speed * 100.0) / (SELECT Total_Count FROM Overall_Count) AS Percentage
     FROM 
-        BetweenDates
-)
+        Speed_Group_Count;
+                    ''',(start_date,end_date))
+        rows=cur.fetchall()
+        cur.close()
+        pairs_dict = {}
+        for group in range(1, 13):
+            for speed in range(0, 7):
+                pairs_dict[("Group_" + str(group)+"Speed_" + str(speed))] = 0
 
-SELECT 
-    Group_id,
-    Speed_id,
-    Count_Per_Group_Speed,
-    (Count_Per_Group_Speed * 100.0) / (SELECT Total_Count FROM Overall_Count) AS Percentage
-FROM 
-    Speed_Group_Count;
-                ''',(start_date,end_date))
-    rows=cur.fetchall()
-    cur.close()
-    pairs_dict = {}
-    for group in range(1, 13):
-        for speed in range(0, 7):
-            pairs_dict[("Group_" + str(group)+"Speed_" + str(speed))] = 0
+        for row in rows:
+            group_id = row[0]
+            speed_id = row[1]
+            percentage = "%.4f" % row[3]  # Assuming percentage is the fourth column in the query result
+            pairs_dict[(group_id+speed_id)] = float(percentage)
+        newData = {
+            f"set{i}": [] for i in range(0, 7)
+        }
+        for i in range(0, 7):
+            for j in range(1, 13):
+                newData[f"set{i}"].append(pairs_dict[f"Group_{j}Speed_{i}"])
+        
+        return newData
+    except:
+        return []
 
-    for row in rows:
-        group_id = row[0]
-        speed_id = row[1]
-        percentage = "%.4f" % row[3]  # Assuming percentage is the fourth column in the query result
-        pairs_dict[(group_id+speed_id)] = float(percentage)
-    newData = {
-        f"set{i}": [] for i in range(0, 7)
-    }
-    for i in range(0, 7):
-        for j in range(1, 13):
-            newData[f"set{i}"].append(pairs_dict[f"Group_{j}Speed_{i}"])
-    
-    return newData
+def wind_speed_from_weather_aws4(start_date,end_date):
+    try:
+        cur=connection.cursor()
+        cur.execute('''
+                    WITH BetweenDates AS (
+                        SELECT * FROM  "Weather"."aws4"
+                        WHERE "Date" BETWEEN %s AND %s
+                    ),
+                    Speed_Group_Count AS (
+        SELECT
+            CASE 
+                WHEN "Wind_Direction" <= 30 THEN 'Group_1'
+                WHEN "Wind_Direction" > 30 AND "Wind_Direction" <= 60 THEN 'Group_2'
+                WHEN "Wind_Direction" > 60 AND "Wind_Direction" <= 90 THEN 'Group_3'
+                WHEN "Wind_Direction" > 90 AND "Wind_Direction" <= 120 THEN 'Group_4'
+                WHEN "Wind_Direction" > 120 AND "Wind_Direction" <= 150 THEN 'Group_5'
+                WHEN "Wind_Direction" > 150 AND "Wind_Direction" <= 180 THEN 'Group_6'
+                WHEN "Wind_Direction" > 180 AND "Wind_Direction" <= 210 THEN 'Group_7'
+                WHEN "Wind_Direction" > 210 AND "Wind_Direction" <= 240 THEN 'Group_8'
+                WHEN "Wind_Direction" > 240 AND "Wind_Direction" <= 270 THEN 'Group_9'
+                WHEN "Wind_Direction" > 270 AND "Wind_Direction" <= 300 THEN 'Group_10'
+                WHEN "Wind_Direction" > 300 AND "Wind_Direction" <= 330 THEN 'Group_11'
+                WHEN "Wind_Direction" > 330 THEN 'Group_12'
+            END AS Group_id,
+            CASE
+                WHEN "Wind_Speed" <= 0.5 THEN 'Speed_0'
+                WHEN "Wind_Speed" > 0.5 AND "Wind_Speed" <= 1 THEN 'Speed_1'
+                WHEN "Wind_Speed" > 1 AND "Wind_Speed" <= 2 THEN 'Speed_2'
+                WHEN "Wind_Speed" > 2 AND "Wind_Speed" <= 3 THEN 'Speed_3'
+                WHEN "Wind_Speed" > 3 AND "Wind_Speed" <= 4 THEN 'Speed_4'
+                WHEN "Wind_Speed" > 4 AND "Wind_Speed" <= 5 THEN 'Speed_5'
+                WHEN "Wind_Speed" > 5 THEN 'Speed_6'
+            END AS Speed_id,
+            COUNT(*) AS Count_Per_Group_Speed
+        FROM 
+            BetweenDates
+        GROUP BY 
+            Group_id, Speed_id
+    ),
+    Overall_Count AS (
+        SELECT 
+            COUNT(*) AS Total_Count
+        FROM 
+            BetweenDates
+    )
+
+    SELECT 
+        Group_id,
+        Speed_id,
+        Count_Per_Group_Speed,
+        (Count_Per_Group_Speed * 100.0) / (SELECT Total_Count FROM Overall_Count) AS Percentage
+    FROM 
+        Speed_Group_Count;
+                    ''',(start_date,end_date))
+        rows=cur.fetchall()
+        cur.close()
+        pairs_dict = {}
+        for group in range(1, 13):
+            for speed in range(0, 7):
+                pairs_dict[("Group_" + str(group)+"Speed_" + str(speed))] = 0
+
+        for row in rows:
+            group_id = row[0]
+            speed_id = row[1]
+            percentage = "%.4f" % row[3]  # Assuming percentage is the fourth column in the query result
+            pairs_dict[(group_id+speed_id)] = float(percentage)
+        newData = {
+            f"set{i}": [] for i in range(0, 7)
+        }
+        for i in range(0, 7):
+            for j in range(1, 13):
+                newData[f"set{i}"].append(pairs_dict[f"Group_{j}Speed_{i}"])
+        
+        return newData
+    except:
+        return []
+
+def max_wind_speed_from_weather_aws4(start_date,end_date):
+    try:
+        cur=connection.cursor()
+        cur.execute('''
+                    WITH BetweenDates AS (
+                        SELECT * FROM  "Weather"."aws4"
+                        WHERE "Date" BETWEEN %s AND %s
+                    ),
+                    Speed_Group_Count AS (
+        SELECT
+            CASE 
+                WHEN "Wind_Direction" <= 30 THEN 'Group_1'
+                WHEN "Wind_Direction" > 30 AND "Wind_Direction" <= 60 THEN 'Group_2'
+                WHEN "Wind_Direction" > 60 AND "Wind_Direction" <= 90 THEN 'Group_3'
+                WHEN "Wind_Direction" > 90 AND "Wind_Direction" <= 120 THEN 'Group_4'
+                WHEN "Wind_Direction" > 120 AND "Wind_Direction" <= 150 THEN 'Group_5'
+                WHEN "Wind_Direction" > 150 AND "Wind_Direction" <= 180 THEN 'Group_6'
+                WHEN "Wind_Direction" > 180 AND "Wind_Direction" <= 210 THEN 'Group_7'
+                WHEN "Wind_Direction" > 210 AND "Wind_Direction" <= 240 THEN 'Group_8'
+                WHEN "Wind_Direction" > 240 AND "Wind_Direction" <= 270 THEN 'Group_9'
+                WHEN "Wind_Direction" > 270 AND "Wind_Direction" <= 300 THEN 'Group_10'
+                WHEN "Wind_Direction" > 300 AND "Wind_Direction" <= 330 THEN 'Group_11'
+                WHEN "Wind_Direction" > 330 THEN 'Group_12'
+            END AS Group_id,
+            CASE
+                WHEN "Max_Wind_Speed" <= 0.5 THEN 'Speed_0'
+                WHEN "Max_Wind_Speed" > 0.5 AND "Max_Wind_Speed" <= 1 THEN 'Speed_1'
+                WHEN "Max_Wind_Speed" > 1 AND "Max_Wind_Speed" <= 2 THEN 'Speed_2'
+                WHEN "Max_Wind_Speed" > 2 AND "Max_Wind_Speed" <= 3 THEN 'Speed_3'
+                WHEN "Max_Wind_Speed" > 3 AND "Max_Wind_Speed" <= 4 THEN 'Speed_4'
+                WHEN "Max_Wind_Speed" > 4 AND "Max_Wind_Speed" <= 5 THEN 'Speed_5'
+                WHEN "Max_Wind_Speed" > 5 THEN 'Speed_6'
+            END AS Speed_id,
+            COUNT(*) AS Count_Per_Group_Speed
+        FROM 
+            BetweenDates
+        GROUP BY 
+            Group_id, Speed_id
+    ),
+    Overall_Count AS (
+        SELECT 
+            COUNT(*) AS Total_Count
+        FROM 
+            BetweenDates
+    )
+
+    SELECT 
+        Group_id,
+        Speed_id,
+        Count_Per_Group_Speed,
+        (Count_Per_Group_Speed * 100.0) / (SELECT Total_Count FROM Overall_Count) AS Percentage
+    FROM 
+        Speed_Group_Count;
+                    ''',(start_date,end_date))
+        rows=cur.fetchall()
+        cur.close()
+        pairs_dict = {}
+        for group in range(1, 13):
+            for speed in range(0, 7):
+                pairs_dict[("Group_" + str(group)+"Speed_" + str(speed))] = 0
+
+        for row in rows:
+            group_id = row[0]
+            speed_id = row[1]
+            percentage = "%.4f" % row[3]  # Assuming percentage is the fourth column in the query result
+            pairs_dict[(group_id+speed_id)] = float(percentage)
+        newData = {
+            f"set{i}": [] for i in range(0, 7)
+        }
+        for i in range(0, 7):
+            for j in range(1, 13):
+                newData[f"set{i}"].append(pairs_dict[f"Group_{j}Speed_{i}"])
+        
+        return newData
+    except:
+        return []
+
+def min_wind_speed_from_weather_aws4(start_date,end_date):
+    try:
+        cur=connection.cursor()
+        cur.execute('''
+                    WITH BetweenDates AS (
+                        SELECT * FROM  "Weather"."aws4"
+                        WHERE "Date" BETWEEN %s AND %s
+                    ),
+                    Speed_Group_Count AS (
+        SELECT
+            CASE 
+                WHEN "Wind_Direction" <= 30 THEN 'Group_1'
+                WHEN "Wind_Direction" > 30 AND "Wind_Direction" <= 60 THEN 'Group_2'
+                WHEN "Wind_Direction" > 60 AND "Wind_Direction" <= 90 THEN 'Group_3'
+                WHEN "Wind_Direction" > 90 AND "Wind_Direction" <= 120 THEN 'Group_4'
+                WHEN "Wind_Direction" > 120 AND "Wind_Direction" <= 150 THEN 'Group_5'
+                WHEN "Wind_Direction" > 150 AND "Wind_Direction" <= 180 THEN 'Group_6'
+                WHEN "Wind_Direction" > 180 AND "Wind_Direction" <= 210 THEN 'Group_7'
+                WHEN "Wind_Direction" > 210 AND "Wind_Direction" <= 240 THEN 'Group_8'
+                WHEN "Wind_Direction" > 240 AND "Wind_Direction" <= 270 THEN 'Group_9'
+                WHEN "Wind_Direction" > 270 AND "Wind_Direction" <= 300 THEN 'Group_10'
+                WHEN "Wind_Direction" > 300 AND "Wind_Direction" <= 330 THEN 'Group_11'
+                WHEN "Wind_Direction" > 330 THEN 'Group_12'
+            END AS Group_id,
+            CASE
+                WHEN "Min_Wind_Speed" <= 0.5 THEN 'Speed_0'
+                WHEN "Min_Wind_Speed" > 0.5 AND "Min_Wind_Speed" <= 1 THEN 'Speed_1'
+                WHEN "Min_Wind_Speed" > 1 AND "Min_Wind_Speed" <= 2 THEN 'Speed_2'
+                WHEN "Min_Wind_Speed" > 2 AND "Min_Wind_Speed" <= 3 THEN 'Speed_3'
+                WHEN "Min_Wind_Speed" > 3 AND "Min_Wind_Speed" <= 4 THEN 'Speed_4'
+                WHEN "Min_Wind_Speed" > 4 AND "Min_Wind_Speed" <= 5 THEN 'Speed_5'
+                WHEN "Min_Wind_Speed" > 5 THEN 'Speed_6'
+            END AS Speed_id,
+            COUNT(*) AS Count_Per_Group_Speed
+        FROM 
+            BetweenDates
+        GROUP BY 
+            Group_id, Speed_id
+    ),
+    Overall_Count AS (
+        SELECT 
+            COUNT(*) AS Total_Count
+        FROM 
+            BetweenDates
+    )
+
+    SELECT 
+        Group_id,
+        Speed_id,
+        Count_Per_Group_Speed,
+        (Count_Per_Group_Speed * 100.0) / (SELECT Total_Count FROM Overall_Count) AS Percentage
+    FROM 
+        Speed_Group_Count;
+                    ''',(start_date,end_date))
+        rows=cur.fetchall()
+        cur.close()
+        pairs_dict = {}
+        for group in range(1, 13):
+            for speed in range(0, 7):
+                pairs_dict[("Group_" + str(group)+"Speed_" + str(speed))] = 0
+
+        for row in rows:
+            group_id = row[0]
+            speed_id = row[1]
+            percentage = "%.4f" % row[3]  # Assuming percentage is the fourth column in the query result
+            pairs_dict[(group_id+speed_id)] = float(percentage)
+        newData = {
+            f"set{i}": [] for i in range(0, 7)
+        }
+        for i in range(0, 7):
+            for j in range(1, 13):
+                newData[f"set{i}"].append(pairs_dict[f"Group_{j}Speed_{i}"])
+        
+        return newData
+    except:
+        return []
+
 def get_comparison_data_from_aws(start_date, end_date, aws3_var, aws4_var, fun):
     try:
         cur = connection.cursor()

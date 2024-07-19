@@ -23,7 +23,7 @@ const makeChart =(data)=>{
             zoomType: 'xy'
         },
         title: {
-          text: `Time Vs RH`,
+          text: `RH`,
           align: 'center'
         },
         yAxis: {
