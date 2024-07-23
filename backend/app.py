@@ -12,6 +12,7 @@ from methods import daily_data_of_weather_aws4
 from methods import weekly_data_of_weather_aws3
 from methods import weekly_data_of_weather_aws4
 from methods import soil_moisture
+from methods import soil_moisture_iitk_daily
 from methods import data_of_soil_moisture
 from methods import data_of_plant_height_iitk_wheat
 from methods import data_of_leaf_area_index_iitk_wheat
@@ -60,6 +61,19 @@ def soil_moisture_from_spectrum():
     end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
     results=[]
     results=soil_moisture(start_date,end_date,id)
+    return jsonify(results)
+
+
+@app.route('/data-collection/soil-moisture/iitk-daily',methods=['POST'])
+def soil_moisture_iitk_daily_from_spectrum():
+    data = request.json
+    start_date_str = data.get('start_date')
+    end_date_str = data.get('end_date')
+    id=data.get('id')
+    start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+    end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
+    results=[]
+    results=soil_moisture_iitk_daily(start_date,end_date,id) # if you will not deal with nan value it is not a valid json format when jsonify it
     return jsonify(results)
 
 @app.route('/data-collection/wheat-crop/iitk',methods=['POST'])

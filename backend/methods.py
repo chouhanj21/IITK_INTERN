@@ -1,5 +1,6 @@
 from db_connection import connection
 from datetime import time
+import math
 from decimal import Decimal
 
 def custom_data_of_weather_aws3(start_date,end_date):
@@ -235,6 +236,29 @@ def soil_moisture(start_date,end_date,id):
         cur.close()
         return results
     except:
+        return []
+    
+def soil_moisture_iitk_daily(start_date, end_date, id):
+    try:
+        cur = connection.cursor()
+        cur.execute('SELECT * FROM "Soil Moisture IITK Daily"."spectrum%s" WHERE "Date" BETWEEN %s AND %s',(id,start_date,end_date))
+        rows = cur.fetchall()
+        
+        results = []
+        for row in rows:
+            result = {}
+            for i, column in enumerate(cur.description):
+                value = row[i]
+                # Replace NaN with null if needed
+                if isinstance(value, float) and math.isnan(value):
+                    result[column.name] = None
+                else:
+                    result[column.name] = value
+            results.append(result)        
+        cur.close()
+        return results
+    except Exception as e:
+        print(e)
         return []
 
     
