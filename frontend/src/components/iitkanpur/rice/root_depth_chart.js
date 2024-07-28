@@ -55,6 +55,7 @@ const makeChart = (data, id, year) => {
         series: [{
             name: "Root Depth",
             data:Y,
+            color: 'green',
         }
         ],
         responsive: {

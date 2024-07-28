@@ -55,6 +55,7 @@ const makeChart = (data, id, year) => {
         series: [{
             name: "Leaf Area Index",
             data:Y,
+            color: 'green',
         }
         ],
         responsive: {

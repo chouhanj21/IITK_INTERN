@@ -4,12 +4,10 @@ function Home() {
   return (
     <>
     <Sidebar/>
-      <h2 className="m-3 ">ET Partitioning Using stable isotopes of oxygen and hydrogen</h2>
-      <div className='container' style={{marginLeft:"0"}}>
-        <div className="row">
-          <div className='col-8'>
+      <div style={{marginLeft:'10px',marginRight:'10px',fontFamily:'Helvetica Neue' }}>
+            <h2>ET Partitioning Using stable isotopes of oxygen and hydrogen</h2>
             <h3>Project Introduction</h3>
-            <p style={{fontSize: "18px", textAlign:'justify'}}>
+            <p style={{textAlign:'justify', fontFamily:'serif',fontSize:'18px'}}>
               The irrigation water demand in the Ganga basin is among the highest in the world (>90% of the total freshwater used in the basin). 
               A major portion of the applied irrigation water eventually evapotranspires. 
               The transpiration (T) component of the evapotranspiration (ET) is associated with crop productivity,
@@ -23,11 +21,18 @@ function Home() {
               The main outcome of the project will be an understanding of the diurnal, 
               inter- and intra- cropping seasonal variations in ET partitioning over rice-wheat system at the study site.  
             </p>
-          </div>
-          <div className='col-4'>
-              <img src="media/ET.png" width={420} height={450} alt="ET" srcSet="" />
-          </div>
-        </div>
+            <div className='container'>
+              <div className='row'>
+                <div className='col-6'>
+                  <img src="media/sites.jpg" width='100%' height='70%' alt="ET" srcSet="" />
+                </div>
+                <div className='col-6'>
+                  <img src="media/ET.png" width='100%' height='72%' alt="ET" srcSet="" />
+                </div>
+
+              </div>
+
+            </div>
       </div>
     </>
   );

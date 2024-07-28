@@ -31,7 +31,7 @@ function Sidebar() {
               <Link className="nav-link text-white" to="/comparison">Comparison</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link text-white" to="/about">About</Link>
+              <Link className="nav-link text-white" to="/about">Contact Us</Link>
             </li>
           </ul>
         </div>

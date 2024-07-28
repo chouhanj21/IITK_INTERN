@@ -20,7 +20,7 @@ function Bithoor() {
       <div>
         <div className="row">
           <div className="col-3" style={{ background: 'blue', padding: '0',minHeight:'calc(100vh - 80px)'}}>
-            <div><button className={activeButton === 'AWS4' ? 'active action' : 'action'} onClick={() => handleButtonClick('AWS4')}>AWS4</button></div>
+            <div><button className={activeButton === 'AWS4' ? 'active action' : 'action'} onClick={() => handleButtonClick('AWS4')}>Weather Data</button></div>
             <div><button className={activeButton === 'Soil Properties' ? 'active action' : 'action'} onClick={() => handleButtonClick('Soil Properties')}>Soil Properties</button></div>
             <div><button className={activeButton === 'Soil Moisture' ? 'active action' : 'action'} onClick={() => handleButtonClick('Soil Moisture')}>Soil Moisture</button></div>
             <div><button className={activeButton === 'Wheat Crop' ? 'active action' : 'action'} onClick={() => handleButtonClick('Wheat Crop')}>Crop Data (Wheat)</button></div>
